@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "bind",
+  "version": "${version}",
+  "name": "bind",
+  "description": "",
+  "authors": [],
+  "contact": {
+    "repo": "https://github.com/ivangeevo/bind"
+  },
+  "license": "MIT",
+  "icon": "assets/bind/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "org.bind.client.BindModClient"
+    ],
+    "main": [
+      "org.bind.BindMod"
+    ],
+    "fabric-datagen": [
+      "org.bind.BindModDataGenerator"
+    ]
+  },
+  "mixins": [
+    "bind.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}

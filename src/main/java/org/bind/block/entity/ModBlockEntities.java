@@ -9,18 +9,13 @@ import org.bind.block.ModBlocks;
 
 public class ModBlockEntities {
 
-    public static BlockEntityType<PlacedToolBE> PLACED_PICKAXE;
-    public static BlockEntityType<PlacedToolBE> PLACED_AXE;
+    public static BlockEntityType<PlacedToolBE> PLACED_TOOL;
 
     public static void registerBlockEntities() {
 
-        PLACED_PICKAXE = Registry.register(Registries.BLOCK_ENTITY_TYPE,
-                Identifier.of(BindMod.MOD_ID, "placed_pickaxe_be"),
-                BlockEntityType.Builder.create(PlacedToolBE::new, ModBlocks.PLACED_PICKAXE).build());
-
-        PLACED_AXE = Registry.register(Registries.BLOCK_ENTITY_TYPE,
-                Identifier.of(BindMod.MOD_ID, "placed_axe_be"),
-                BlockEntityType.Builder.create(PlacedToolBE::new, ModBlocks.PLACED_AXE).build());
+        PLACED_TOOL = Registry.register(Registries.BLOCK_ENTITY_TYPE,
+                Identifier.of(BindMod.MOD_ID, "placed_tool_block_entity"),
+                BlockEntityType.Builder.create(PlacedToolBE::new, ModBlocks.PLACED_TOOL).build());
 
         BindMod.LOGGER.info("Registering Block Entities for " + BindMod.MOD_ID);
     }

@@ -1,5 +1,6 @@
 package org.bind.block.entity.renderer;
 
+import net.minecraft.block.enums.BlockFace;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
@@ -24,6 +25,7 @@ public class PlacedToolBERenderer implements BlockEntityRenderer<PlacedToolBE> {
     public void render(PlacedToolBE entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
         ItemStack item = entity.getToolStack();
         Direction facing = entity.getCachedState().get(PlacedToolBlock.FACING);
+        BlockFace face = entity.getCachedState().get(PlacedToolBlock.FACE);
 
         if (!item.isEmpty()) {
             matrices.push();
@@ -32,13 +34,10 @@ public class PlacedToolBERenderer implements BlockEntityRenderer<PlacedToolBE> {
             matrices.translate(0.5f, 0.58f, 0.5f);
 
             // Apply the visual offset logic
-            applyVisualOffset(matrices, facing);
+            applyVisualOffset(matrices, facing, face);
 
             // Rotate based on the facing direction
-            applyRotation(matrices, facing);
-
-            // Scale the item to an appropriate size
-            matrices.scale(0.5f, 0.5f, 0.5f);
+            applyRotation(matrices, facing, face);
 
             // Use the itemRenderer to render the item
             this.itemRenderer.renderItem(item, ModelTransformationMode.GUI,
@@ -49,43 +48,38 @@ public class PlacedToolBERenderer implements BlockEntityRenderer<PlacedToolBE> {
         }
     }
 
-    private void applyVisualOffset(MatrixStack matrices, Direction facing) {
+    private void applyVisualOffset(MatrixStack matrices, Direction facing, BlockFace face) {
         float visualOffset = 0.25f;
 
-        switch (facing) {
-            case NORTH:
-                matrices.translate(0.0f, 0.0f, -0.5f + visualOffset);
-                break;
-            case SOUTH:
-                matrices.translate(0.0f, 0.0f, 0.5f - visualOffset);
-                break;
-            case WEST:
-                matrices.translate(-0.5f + visualOffset, 0.0f, 0.0f);
-                break;
-            case EAST:
-                matrices.translate(0.5f - visualOffset, 0.0f, 0.0f);
-                break;
-            default:
-                break;
+        switch (face) {
+            case WALL -> {
+                switch (facing) {
+                    case NORTH -> matrices.translate(0.0f, 0.0f, -0.5f + visualOffset);
+                    case SOUTH -> matrices.translate(0.0f, 0.0f, 0.5f - visualOffset);
+                    case WEST -> matrices.translate(-0.5f + visualOffset, 0.0f, 0.0f);
+                    case EAST -> matrices.translate(0.5f - visualOffset, 0.0f, 0.0f);
+                    default -> {
+                    }
+                }
+            }
+            case FLOOR -> matrices.translate(0.0f, -0.5f + visualOffset, 0.0f);
+            case CEILING -> matrices.translate(0.0f, 0.5f - visualOffset, 0.0f);
         }
+
     }
 
-    private void applyRotation(MatrixStack matrices, Direction facing) {
+    private void applyRotation(MatrixStack matrices, Direction facing, BlockFace face) {
         switch (facing) {
-            case NORTH:
-                matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
-                break;
-            case SOUTH:
-                matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(0));
-                break;
-            case WEST:
-                matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(90));
-                break;
-            case EAST:
-                matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(270));
-                break;
-            default:
-                break;
+            case WEST -> matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(0));
+            case SOUTH -> matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(90));
+            case EAST -> matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
+            case NORTH -> matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(270));
+            default -> {}
+        }
+        switch (face) {
+            case CEILING -> matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(0));
+            case WALL -> matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(90));
+            case FLOOR -> matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180));
         }
     }
 }

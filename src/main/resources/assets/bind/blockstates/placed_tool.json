@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "bind:block/placed_tool"}
+  }
+}

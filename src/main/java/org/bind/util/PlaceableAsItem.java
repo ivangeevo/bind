@@ -1,13 +1,13 @@
 package org.bind.util;
 
 public interface PlaceableAsItem {
-	float getVisualVerticalOffsetAsBlock();
+	float bind$getVisualVerticalOffsetAsBlock();
 
-	float getVisualHorizontalOffsetAsBlock();
+	float bind$getVisualHorizontalOffsetAsBlock();
 
-	float getVisualRollOffsetAsBlock();
+	float bind$getVisualRollOffsetAsBlock();
 
-	float getBlockBoundingBoxHeight();
+	float bind$getBlockBoundingBoxHeight();
 
-	float getBlockBoundingBoxWidth();
+	float bind$getBlockBoundingBoxWidth();
 }

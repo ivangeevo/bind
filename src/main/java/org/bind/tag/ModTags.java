@@ -15,8 +15,6 @@ public class ModTags
         public static final TagKey<Block> AGGREGATE_SOUND_BLOCKS = createTag("aggregate_sound_blocks");
         public static final TagKey<Block> STONE_SOUND_BLOCKS = createTag("stone_sound_blocks");
 
-
-
         private static TagKey<Block> createTag (String name) {
             return TagKey.of(RegistryKeys.BLOCK, Identifier.of(BindMod.MOD_ID, name));
         }
@@ -24,7 +22,7 @@ public class ModTags
 
     public static class Items {
 
-        //public static final TagKey<Item> OVEN_COOKABLE = createTag("oven_cookable");
+        public static final TagKey<Item> SPECIAL_MODDED_TOOLS = createTag("special_modded_tools");
 
 
 

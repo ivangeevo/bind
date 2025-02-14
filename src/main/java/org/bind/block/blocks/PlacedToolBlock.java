@@ -7,7 +7,7 @@ import net.minecraft.block.enums.BlockFace;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContextParameterSet;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.EnumProperty;
@@ -20,20 +20,14 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
-import org.bind.block.entity.ModBlockEntities;
 import org.bind.block.entity.PlacedToolBE;
-import org.bind.util.PlaceableAsItem;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class PlacedToolBlock extends BlockWithEntity {
 
@@ -58,7 +52,7 @@ public class PlacedToolBlock extends BlockWithEntity {
     public static final EnumProperty<BlockFace> FACE = Properties.BLOCK_FACE;
 
     public PlacedToolBlock(Settings settings) {
-        super(settings);
+        super(settings.noCollision());
         this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.NORTH).with(FACE, BlockFace.FLOOR));
     }
 
@@ -160,6 +154,7 @@ public class PlacedToolBlock extends BlockWithEntity {
             if (world.getBlockEntity(pos) instanceof PlacedToolBE placedToolBlockEntity) {
                 itemStack = placedToolBlockEntity.getToolStack().copy();
                 placedToolBlockEntity.setToolStack(ItemStack.EMPTY);
+                player.playSound(SoundEvents.ENTITY_ITEM_PICKUP);
             }
             player.setStackInHand(player.getActiveHand(), itemStack);
             world.removeBlock(pos, false);

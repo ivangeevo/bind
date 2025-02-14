@@ -1,12 +1,8 @@
 package org.bind.util;
 
 import net.minecraft.advancement.criterion.Criteria;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.SideShapeType;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.BlockStateComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.registry.tag.ItemTags;
@@ -16,13 +12,12 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 import org.bind.block.ModBlocks;
-import org.bind.block.blocks.PlacedToolBlock;
 import org.bind.block.entity.PlacedToolBE;
 import org.bind.tag.ModTags;
+import org.tough_environment.item.ChiselToolMaterials;
 
 public class ToolManager {
 
@@ -33,11 +28,13 @@ public class ToolManager {
         if (!(tool.getItem() instanceof ToolItem toolItem)) {
             return false;
         }
+
         if (toolItem.getMaterial() != ToolMaterials.WOOD
                 && toolItem.getMaterial() != ToolMaterials.STONE
                 && toolItem.getMaterial() != ToolMaterials.IRON
                 && toolItem.getMaterial() != ToolMaterials.DIAMOND
-                && toolItem.getMaterial() != ToolMaterials.NETHERITE) {
+                && toolItem.getMaterial() != ToolMaterials.NETHERITE
+                && !isViableChiselToolMaterial(toolItem)) {
             return false;
         }
 
@@ -45,7 +42,15 @@ public class ToolManager {
                 || tool.isIn(ItemTags.AXES)
                 || tool.isIn(ItemTags.SHOVELS)
                 || tool.isIn(ItemTags.HOES)
-                || tool.isIn(ItemTags.SWORDS);
+                || tool.isIn(ItemTags.SWORDS)
+                || tool.isIn(ModTags.Items.SPECIAL_MODDED_TOOLS)
+                ;
+    }
+
+    private static boolean isViableChiselToolMaterial(ToolItem toolItem) {
+        return toolItem.getMaterial() == ChiselToolMaterials.WOOD
+                || toolItem.getMaterial() != ChiselToolMaterials.IRON
+                || toolItem.getMaterial() != ChiselToolMaterials.DIAMOND;
     }
 
     /**

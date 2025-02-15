@@ -1,13 +1,30 @@
 package org.bind.util;
 
 public interface PlaceableAsItem {
-	float bind$getVisualVerticalOffsetAsBlock();
+	/**
+	 * All of these orientation values are from the perspective of when the item is set into the floor.
+	 * For example, "Vertical offset" means how much to shift the rendering upward/downward when set into the floor.
+	 * "Horizontal offset" means forward/backward offset when set into the floor.
+	 *
+	 */
 
-	float bind$getVisualHorizontalOffsetAsBlock();
+	default float bind$getVisualVerticalOffsetPixels() {
+		return 0;
+	}
 
-	float bind$getVisualRollOffsetAsBlock();
+	default float bind$getVisualHorizontalOffsetPixels() {
+		return 0;
+	}
 
-	float bind$getBlockBoundingBoxHeight();
+	default float bind$getVisualPitchDegrees() {
+		return 0;
+	}
 
-	float bind$getBlockBoundingBoxWidth();
+	default float bind$getBlockBoundingBoxHeightPixels() {
+		return 16f;
+	}
+
+	default float bind$getBlockBoundingBoxWidthPixels() {
+		return 16f;
+	}
 }

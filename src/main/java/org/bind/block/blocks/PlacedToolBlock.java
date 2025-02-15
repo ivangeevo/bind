@@ -75,7 +75,7 @@ public class PlacedToolBlock extends BlockWithEntity {
         if (direction.getAxis() == Direction.Axis.Y) {
             blockState = blockState
                     .with(FACE, direction == Direction.UP ? BlockFace.FLOOR : BlockFace.CEILING)
-                    .with(FACING, direction == Direction.UP ? ctx.getHorizontalPlayerFacing() : ctx.getHorizontalPlayerFacing().getOpposite());
+                    .with(FACING, ctx.getHorizontalPlayerFacing());
         } else {
             blockState = blockState.with(FACE, BlockFace.WALL).with(FACING, direction.getOpposite());
         }

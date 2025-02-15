@@ -4,7 +4,12 @@
   "package": "org.bind.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "ItemStackMixin"
+    "ItemStackMixin",
+    "AxeltemMixin",
+    "HoeltemMixin",
+    "PickaxeltemMixin",
+    "ShoveltemMixin",
+    "SwordItemMixin"
   ],
   "client": [
   ],

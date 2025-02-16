@@ -7,8 +7,7 @@ import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 import org.bind.BindMod;
 
-public class ModTags
-{
+public class ModTags {
 
     public static class Blocks {
 
@@ -23,8 +22,6 @@ public class ModTags
     public static class Items {
 
         public static final TagKey<Item> SPECIAL_MODDED_TOOLS = createTag("special_modded_tools");
-
-
 
         private static TagKey<Item> createTag (String name) {
             return TagKey.of(RegistryKeys.ITEM, Identifier.of(BindMod.MOD_ID, name));

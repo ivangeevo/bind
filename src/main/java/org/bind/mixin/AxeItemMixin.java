@@ -1,19 +1,19 @@
 package org.bind.mixin;
 
-import net.minecraft.item.PickaxeItem;
+import net.minecraft.item.AxeItem;
 import org.bind.util.PlaceableAsItem;
 import org.spongepowered.asm.mixin.Mixin;
 
-@Mixin(PickaxeItem.class)
-public class PickaxeltemMixin implements PlaceableAsItem {
+@Mixin(AxeItem.class)
+public abstract class AxeItemMixin implements PlaceableAsItem {
     @Override
     public float bind$getVisualPitchDegrees() {
-        return -15f;
+        return 0f;
     }
 
     @Override
     public float bind$getVisualVerticalOffsetPixels() {
-        return 4.75f;
+        return 5f;
     }
 
     @Override

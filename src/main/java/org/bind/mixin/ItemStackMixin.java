@@ -6,7 +6,7 @@ import net.minecraft.item.*;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.bind.util.ToolManager;
+import org.bind.util.PlaceableToolManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,8 +16,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import static org.lwjgl.glfw.GLFW.*;
 
 @Mixin(ItemStack.class)
-public abstract class ItemStackMixin
-{
+public abstract class ItemStackMixin {
+
     @Inject(method = "useOnBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/Item;useOnBlock(Lnet/minecraft/item/ItemUsageContext;)Lnet/minecraft/util/ActionResult;"), cancellable = true)
     private void onUseOnBlock(ItemUsageContext context, CallbackInfoReturnable<ActionResult> cir, @Local Item item) {
         World world = context.getWorld();
@@ -29,11 +29,11 @@ public abstract class ItemStackMixin
         BlockPos pos = context.getBlockPos();
         BlockPos placePos = pos.offset(context.getSide());
 
-        if (!ToolManager.isValidTool(context.getStack()) || !world.getBlockState(placePos).isReplaceable()) {
+        if (!PlaceableToolManager.isValidTool(context.getStack()) || !world.getBlockState(placePos).isReplaceable()) {
             return;
         }
 
-        boolean success = ToolManager.placeToolBlock(world, placePos, context);
+        boolean success = PlaceableToolManager.placeToolBlock(world, placePos, context);
         if (success) {
             cir.setReturnValue(ActionResult.SUCCESS);
         }

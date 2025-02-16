@@ -5,7 +5,7 @@ import org.bind.util.PlaceableAsItem;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(HoeItem.class)
-public class HoeltemMixin implements PlaceableAsItem {
+public abstract class HoeItemMixin implements PlaceableAsItem {
     @Override
     public float bind$getVisualPitchDegrees() {
         return 0f;

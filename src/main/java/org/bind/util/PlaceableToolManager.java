@@ -19,7 +19,7 @@ import org.bind.block.entity.PlacedToolBE;
 import org.bind.tag.ModTags;
 import org.tough_environment.item.ChiselToolMaterials;
 
-public class ToolManager {
+public class PlaceableToolManager {
 
     /**
      * Determines the type of tool based on the item stack.

@@ -46,8 +46,6 @@ public class PlacedToolBlock extends BlockWithEntity {
         SHAPES.put(Direction.WEST, Block.createCuboidShape(0, 0, 7.5, 16, 16, 8.5));
     }
 
-
-
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING; // Changed to horizontal facing
     public static final EnumProperty<BlockFace> FACE = Properties.BLOCK_FACE;
 

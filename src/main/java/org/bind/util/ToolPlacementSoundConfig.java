@@ -11,21 +11,21 @@ public enum ToolPlacementSoundConfig
     AGGREGATE_SOUND(
             ModTags.Blocks.AGGREGATE_SOUND_BLOCKS,
             SoundEvents.BLOCK_GRAVEL_PLACE,
-            0.1F,
+            0.5F,
             1.25F,
             0.25F
     ),
     WOODEN_SOUND(
             ModTags.Blocks.WOOD_SOUND_BLOCKS,
             SoundEvents.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR,
-            0.1F,
+            0.5F,
             1.25F,
             0.25F
     ),
     STONE_TOOL_SOUND(
             ModTags.Blocks.STONE_SOUND_BLOCKS,
             SoundEvents.BLOCK_ANVIL_LAND,
-            0.1F,
+            0.5F,
             1.75F,
             0.25F
     );

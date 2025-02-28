@@ -10,7 +10,7 @@ import net.minecraft.world.World;
 public class ToolPlacementSoundManager
 {
 
-    public static void playCraftingSound(BlockState state, PlayerEntity player) {
+    public static void playPlacementSound(BlockState state, PlayerEntity player) {
         World world = player.getWorld();
         BlockPos thisPos = player.getBlockPos();
         SoundEvent sound = null;

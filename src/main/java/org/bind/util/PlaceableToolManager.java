@@ -9,9 +9,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
@@ -84,19 +81,9 @@ public class PlaceableToolManager {
         if (playerEntity instanceof ServerPlayerEntity) {
             Criteria.PLACED_BLOCK.trigger((ServerPlayerEntity)playerEntity, pos, tool);
         }
-        BlockState toolAttachedToState = context.getWorld().getBlockState(pos);
-        BlockSoundGroup soundGroup = toolAttachedToState.getSoundGroup();
-        /**
-        world.playSound(
-                null,
-                pos,
-                getPlaceSound(toolAttachedToState),
-                SoundCategory.BLOCKS,
-                (soundGroup.getVolume() + 1.0F) / 2.0F,
-                soundGroup.getPitch() * 1.2F
-        );
-         **/
-        ToolPlacementSoundManager.playCraftingSound(stateAtPos, playerEntity);
+
+        assert playerEntity != null;
+        ToolPlacementSoundManager.playPlacementSound(stateAtPos, playerEntity);
 
         world.emitGameEvent(GameEvent.BLOCK_PLACE, pos, GameEvent.Emitter.of(playerEntity, placedState));
         originalTool.decrementUnlessCreative(1, playerEntity);

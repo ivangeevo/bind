@@ -1,6 +1,6 @@
 {
   "values": [
-    "minecraft:dirt",
-    "minecraft:gravel"
+    "#minecraft:mineable/shovel",
+    "#minecraft:mineable/hoe"
   ]
 }

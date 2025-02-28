@@ -1,5 +1,7 @@
 package org.bind.util;
 
+import com.bwt.items.BwtItems;
+import com.bwt.tags.BwtBlockTags;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -8,7 +10,6 @@ import net.minecraft.item.*;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
@@ -18,6 +19,7 @@ import org.bind.block.ModBlocks;
 import org.bind.block.entity.PlacedToolBE;
 import org.bind.tag.ModTags;
 import org.tough_environment.item.ChiselToolMaterials;
+import org.tough_environment.item.ModItems;
 
 public class PlaceableToolManager {
 
@@ -54,25 +56,20 @@ public class PlaceableToolManager {
     }
 
     /**
-     * Plays the appropriate place sound based on the block state.
-     */
-    public static SoundEvent getPlaceSound(BlockState state) {
-        if (state.isIn(ModTags.Blocks.AGGREGATE_SOUND_BLOCKS)) {
-            return SoundEvents.BLOCK_GRAVEL_PLACE;
-        }
-        if (state.isIn(ModTags.Blocks.STONE_SOUND_BLOCKS)) {
-            return SoundEvents.BLOCK_STONE_PLACE;
-        }
-        return SoundEvents.BLOCK_WOOD_PLACE; // Default sound
-    }
-
-    /**
      * Places the tool block with the correct state and plays sound.
      */
     public static boolean placeToolBlock(World world, BlockPos pos, ItemUsageContext context) {
         ItemStack originalTool = context.getStack();
         ItemStack tool = originalTool.copy();
         PlayerEntity playerEntity = context.getPlayer();
+
+        BlockPos attachPos = pos.offset(context.getSide().getOpposite());
+        BlockState stateAtPos = world.getBlockState(attachPos);
+
+        // Validate if the tool can be placed on this block
+        if (!isValidPlacement(tool, stateAtPos)) {
+            return false;
+        }
 
         BlockState placedState = ModBlocks.PLACED_TOOL.getPlacementState(new ItemPlacementContext(context));
         if (placedState == null) {
@@ -89,16 +86,53 @@ public class PlaceableToolManager {
         }
         BlockState toolAttachedToState = context.getWorld().getBlockState(pos);
         BlockSoundGroup soundGroup = toolAttachedToState.getSoundGroup();
+        /**
         world.playSound(
-                playerEntity,
+                null,
                 pos,
                 getPlaceSound(toolAttachedToState),
                 SoundCategory.BLOCKS,
                 (soundGroup.getVolume() + 1.0F) / 2.0F,
-                soundGroup.getPitch() * 0.8F
+                soundGroup.getPitch() * 1.2F
         );
+         **/
+        ToolPlacementSoundManager.playCraftingSound(stateAtPos, playerEntity);
+
         world.emitGameEvent(GameEvent.BLOCK_PLACE, pos, GameEvent.Emitter.of(playerEntity, placedState));
         originalTool.decrementUnlessCreative(1, playerEntity);
         return true;
     }
+
+    private static boolean isValidPlacement(ItemStack toolStack, BlockState stateAtPos) {
+        if (toolStack.isIn(ItemTags.PICKAXES)) {
+            return stateAtPos.isIn(ModTags.Blocks.STONE_SOUND_BLOCKS);
+        }
+
+        if (toolStack.isIn(ItemTags.SHOVELS) || toolStack.isIn(ItemTags.HOES)) {
+            return stateAtPos.isIn(ModTags.Blocks.AGGREGATE_SOUND_BLOCKS);
+        }
+
+        if (toolStack.isIn(ItemTags.SWORDS)) {
+            return stateAtPos.isIn(ModTags.Blocks.AGGREGATE_SOUND_BLOCKS) || stateAtPos.isIn(ModTags.Blocks.WOOD_SOUND_BLOCKS);
+        }
+
+        if (toolStack.isIn(ItemTags.AXES)) {
+            return stateAtPos.isIn(ModTags.Blocks.WOOD_SOUND_BLOCKS);
+        }
+
+        if (toolStack.isOf(ModItems.CHISEL_IRON) || toolStack.isOf(ModItems.CHISEL_DIAMOND)) {
+            return stateAtPos.isIn(ModTags.Blocks.STONE_SOUND_BLOCKS);
+        }
+
+        if (toolStack.isOf(BwtItems.netheriteMattockItem)) {
+            return stateAtPos.isIn(BwtBlockTags.MATTOCK_MINEABLE);
+        }
+
+        if (toolStack.isOf(BwtItems.netheriteBattleAxeItem)) {
+            return stateAtPos.isIn(BwtBlockTags.BATTLEAXE_MINEABLE);
+        }
+
+        return true; // Allow all other tools
+    }
+
 }

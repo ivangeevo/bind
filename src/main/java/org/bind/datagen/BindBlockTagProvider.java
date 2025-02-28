@@ -2,8 +2,6 @@ package org.bind.datagen;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.Items;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.BlockTags;
 import org.bind.tag.ModTags;
@@ -20,10 +18,15 @@ public class BindBlockTagProvider extends FabricTagProvider.BlockTagProvider {
     @Override
     protected void configure(RegistryWrapper.WrapperLookup arg) {
         getOrCreateTagBuilder(ModTags.Blocks.AGGREGATE_SOUND_BLOCKS)
-                .add(Blocks.DIRT)
-                .add(Blocks.GRAVEL);
+                .forceAddTag(BlockTags.SHOVEL_MINEABLE)
+                .forceAddTag(BlockTags.HOE_MINEABLE);
 
         getOrCreateTagBuilder(ModTags.Blocks.STONE_SOUND_BLOCKS)
-                .forceAddTag(BlockTags.STONE_ORE_REPLACEABLES);
+                .forceAddTag(BlockTags.PICKAXE_MINEABLE)
+                .forceAddTag(BlockTags.BASE_STONE_OVERWORLD)
+                .forceAddTag(BlockTags.BASE_STONE_NETHER);
+
+        getOrCreateTagBuilder(ModTags.Blocks.WOOD_SOUND_BLOCKS)
+                .forceAddTag(BlockTags.AXE_MINEABLE);
     }
 }

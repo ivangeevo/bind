@@ -1,5 +1,7 @@
 {
   "values": [
-    "#minecraft:stone_ore_replaceables"
+    "#minecraft:mineable/pickaxe",
+    "#minecraft:base_stone_overworld",
+    "#minecraft:base_stone_nether"
   ]
 }

@@ -5,6 +5,7 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.enums.BlockFace;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundEvents;
@@ -20,11 +21,13 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import org.bind.block.entity.PlacedToolBE;
+import org.bind.util.PlaceableAsItem;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -58,6 +61,24 @@ public class PlacedToolBlock extends BlockWithEntity {
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         Direction facing = state.get(FACING);
         Direction horizontal = facing.getAxis().isHorizontal() ? facing : Direction.NORTH;
+
+        if (!(world.getBlockEntity(pos) instanceof PlacedToolBE be)) {
+            return VoxelShapes.empty();
+        }
+
+        if (!(be.getToolStack().getItem() instanceof PlaceableAsItem placeableAsItem)) {
+            return VoxelShapes.empty();
+        }
+
+
+        float minHeight = placeableAsItem.bind$getBlockBoundingBoxMinHeightPixels();
+        float maxHeight = placeableAsItem.bind$getBlockBoundingBoxMaxHeightPixels();
+
+        float minWidth = placeableAsItem.bind$getBlockBoundingBoxMinWidthPixels();
+        float maxWidth = placeableAsItem.bind$getBlockBoundingBoxMaxWidthPixels();
+
+        placeableAsItem.bind$getOutlineShapesForTool(state, SHAPES, minHeight, maxHeight, minWidth, maxWidth);
+
         return SHAPES.get(horizontal);
     }
 
@@ -90,6 +111,10 @@ public class PlacedToolBlock extends BlockWithEntity {
     }
 
     public static boolean canPlaceAt(WorldView world, BlockPos pos, Direction direction) {
+        return isSideSolidBlock(world, pos, direction);
+    }
+
+    private static boolean isSideSolidBlock(WorldView world, BlockPos pos, Direction direction) {
         BlockPos blockPos = pos.offset(direction);
         return world.getBlockState(blockPos).isSideSolid(world, pos, direction.getOpposite(), SideShapeType.CENTER);
     }
@@ -147,8 +172,8 @@ public class PlacedToolBlock extends BlockWithEntity {
 
     @Override
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+        ItemStack itemStack = ItemStack.EMPTY;
         if (player.getMainHandStack().isEmpty()) {
-            ItemStack itemStack = ItemStack.EMPTY;
             if (world.getBlockEntity(pos) instanceof PlacedToolBE placedToolBlockEntity) {
                 itemStack = placedToolBlockEntity.getToolStack().copy();
                 placedToolBlockEntity.setToolStack(ItemStack.EMPTY);
@@ -160,6 +185,17 @@ public class PlacedToolBlock extends BlockWithEntity {
         }
         return super.onUse(state, world, pos, player, hit);
     }
+
+    public static boolean hasEmptySlot(PlayerEntity player) {
+        PlayerInventory inventory = player.getInventory();
+        for (int i = 0; i < inventory.size(); i++) {
+            if (inventory.getStack(i).isEmpty()) {
+                return true; // Found an empty slot
+            }
+        }
+        return false; // No empty slots
+    }
+
 
     @Override
     protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {

@@ -1,6 +1,7 @@
 package org.bind.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.*;
 import net.minecraft.util.ActionResult;
@@ -30,6 +31,11 @@ public abstract class ItemStackMixin {
         BlockPos placePos = pos.offset(context.getSide());
 
         if (!PlaceableToolManager.isValidTool(context.getStack()) || !world.getBlockState(placePos).isReplaceable()) {
+            return;
+        }
+
+        // TODO: Make this a more generic check to disallow placing on certain blocks like this one if possible
+        if (world.getBlockState(context.getBlockPos()).isOf(Blocks.SHORT_GRASS)) {
             return;
         }
 

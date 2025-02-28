@@ -5,8 +5,11 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "AxeItemMixin",
+    "BattleAxeItemMixin",
+    "ChiselItemMixin",
     "HoeItemMixin",
     "ItemStackMixin",
+    "MattockItemMixin",
     "PickaxeItemMixin",
     "ShovelItemMixin",
     "SwordItemMixin"

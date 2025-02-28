@@ -1,8 +1,8 @@
 package org.bind.mixin;
 
+import com.bwt.items.BattleAxeItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.item.HoeItem;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import org.bind.block.blocks.PlacedToolBlock;
@@ -11,8 +11,9 @@ import org.spongepowered.asm.mixin.Mixin;
 
 import java.util.HashMap;
 
-@Mixin(HoeItem.class)
-public abstract class HoeItemMixin implements PlaceableAsItem {
+@Mixin(BattleAxeItem.class)
+public abstract class BattleAxeItemMixin implements PlaceableAsItem {
+
     @Override
     public float bind$getVisualPitchDegrees() {
         return 0f;
@@ -20,12 +21,12 @@ public abstract class HoeItemMixin implements PlaceableAsItem {
 
     @Override
     public float bind$getVisualVerticalOffsetPixels() {
-        return 5.5f;
+        return 5f;
     }
 
     @Override
     public float bind$getVisualHorizontalOffsetPixels() {
-        return -1f;
+        return 0f;
     }
 
     @Override
@@ -37,6 +38,7 @@ public abstract class HoeItemMixin implements PlaceableAsItem {
     public float bind$getBlockBoundingBoxMaxHeightPixels() {
         return 14f;
     }
+
 
     @Override
     public void bind$getOutlineShapesForTool(BlockState state, HashMap<Direction, VoxelShape> shapesMap, float minHeight, float maxHeight, float minWidth, float maxWidth) {

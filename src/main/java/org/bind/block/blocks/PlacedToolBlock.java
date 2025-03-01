@@ -70,7 +70,6 @@ public class PlacedToolBlock extends BlockWithEntity {
             return VoxelShapes.empty();
         }
 
-
         float minHeight = placeableAsItem.bind$getBlockBoundingBoxMinHeightPixels();
         float maxHeight = placeableAsItem.bind$getBlockBoundingBoxMaxHeightPixels();
 

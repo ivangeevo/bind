@@ -12,7 +12,7 @@
     "repo": "https://github.com/ivangeevo/bind"
   },
   "license": "CC-BY-4.0",
-  "icon": "assets/bind/icon.png",
+  "icon": "icon.png",
   "environment": "*",
   "entrypoints": {
     "client": [

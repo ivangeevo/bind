@@ -6,9 +6,7 @@ import org.bind.datagen.BindBlockTagProvider;
 import org.bind.datagen.BindItemTagProvider;
 
 
-public class BindModDataGenerator implements DataGeneratorEntrypoint
-{
-
+public class BindModDataGenerator implements DataGeneratorEntrypoint {
 
     @Override
     public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
@@ -16,7 +14,6 @@ public class BindModDataGenerator implements DataGeneratorEntrypoint
 
         pack.addProvider(BindBlockTagProvider::new);
         pack.addProvider(BindItemTagProvider::new);
-
 
     }
 }

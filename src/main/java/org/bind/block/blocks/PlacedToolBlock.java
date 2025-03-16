@@ -172,28 +172,51 @@ public class PlacedToolBlock extends BlockWithEntity {
     @Override
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         ItemStack itemStack = ItemStack.EMPTY;
+
+        // Get the PlacedToolBE block entity once
+        if (world.getBlockEntity(pos) instanceof PlacedToolBE placedToolBlockEntity) {
+            itemStack = placedToolBlockEntity.getToolStack().copy();
+            placedToolBlockEntity.setToolStack(ItemStack.EMPTY);
+        }
+
+        // If the player's main hand is empty, give the item to the player
         if (player.getMainHandStack().isEmpty()) {
-            if (world.getBlockEntity(pos) instanceof PlacedToolBE placedToolBlockEntity) {
-                itemStack = placedToolBlockEntity.getToolStack().copy();
-                placedToolBlockEntity.setToolStack(ItemStack.EMPTY);
-                player.playSound(SoundEvents.ENTITY_ITEM_PICKUP);
-            }
             player.setStackInHand(player.getActiveHand(), itemStack);
+            player.playSound(SoundEvents.ENTITY_ITEM_PICKUP);
             world.removeBlock(pos, false);
             return ActionResult.SUCCESS;
         }
+
+        // If the player has an empty slot, give the item to the player
+        if (hasInventoryEmptySlot(player)) {
+            player.giveItemStack(itemStack);
+            player.playSound(SoundEvents.ENTITY_ITEM_PICKUP);
+            world.removeBlock(pos, false);
+            return ActionResult.SUCCESS;
+        } else if (!hasInventoryEmptySlot(player)) {
+            // If the inventory is full, drop the item at the block position
+            ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), itemStack);
+            world.removeBlock(pos, false);
+            return ActionResult.SUCCESS;
+        }
+
         return super.onUse(state, world, pos, player, hit);
     }
 
-    public static boolean hasEmptySlot(PlayerEntity player) {
+
+    public static boolean hasInventoryEmptySlot(PlayerEntity player) {
         PlayerInventory inventory = player.getInventory();
-        for (int i = 0; i < inventory.size(); i++) {
+
+        // Check only the main inventory slots (slots 0-35)
+        for (int i = 0; i < 36; i++) {
             if (inventory.getStack(i).isEmpty()) {
-                return true; // Found an empty slot
+                return true; // Found an empty slot in the main inventory
             }
         }
-        return false; // No empty slots
+
+        return false; // No empty slots in the main inventory
     }
+
 
 
     @Override

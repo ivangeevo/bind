@@ -8,7 +8,10 @@ import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RotationAxis;
+import net.minecraft.world.LightType;
+import net.minecraft.world.World;
 import org.bind.block.blocks.PlacedToolBlock;
 import org.bind.block.entity.PlacedToolBE;
 import org.bind.util.PlaceableAsItem;
@@ -31,6 +34,9 @@ public class PlacedToolBERenderer implements BlockEntityRenderer<PlacedToolBE> {
             placeableAsItem = placeableAsItem1;
         }
 
+        BlockPos blockPos = entity.getPos();
+        World world = entity.getWorld();
+
         if (!itemStack.isEmpty()) {
             matrices.push();
 
@@ -43,10 +49,18 @@ public class PlacedToolBERenderer implements BlockEntityRenderer<PlacedToolBE> {
             // Rotate based on the facing direction
             applyRotation(matrices, state, placeableAsItem);
 
-            // Use the itemRenderer to render the item
-            this.itemRenderer.renderItem(itemStack, ModelTransformationMode.GUI,
-                    LightmapTextureManager.pack(8, 15), OverlayTexture.DEFAULT_UV,
+            if (world != null && blockPos != null) {
+                int blockLight = world.getLightLevel(LightType.BLOCK, blockPos);
+                int skyLight = world.getLightLevel(LightType.SKY, blockPos);
+
+                // Pack them together into one value
+                int lightPacked = LightmapTextureManager.pack(blockLight, skyLight);
+
+                // Use the itemRenderer to render the item
+                this.itemRenderer.renderItem(itemStack, ModelTransformationMode.GUI,
+                    lightPacked, OverlayTexture.DEFAULT_UV,
                     matrices, vertexConsumers, entity.getWorld(), 1);
+            }
 
             matrices.pop();
         }

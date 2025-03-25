@@ -1,5 +1,6 @@
 package org.bind.datagen;
 
+import btwr.btwr_sl.tag.BTWRConventionalTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.registry.RegistryWrapper;
@@ -27,6 +28,9 @@ public class BindBlockTagProvider extends FabricTagProvider.BlockTagProvider {
                 .forceAddTag(BlockTags.BASE_STONE_NETHER);
 
         getOrCreateTagBuilder(ModTags.Blocks.WOOD_SOUND_BLOCKS)
-                .forceAddTag(BlockTags.AXE_MINEABLE);
+                .forceAddTag(BlockTags.AXE_MINEABLE)
+                .forceAddTag(BTWRConventionalTags.Blocks.STUMP_BLOCKS)
+
+        ;
     }
 }

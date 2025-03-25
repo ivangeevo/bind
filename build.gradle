@@ -51,6 +51,7 @@ repositories {
 
     // Modrinth maven
     maven { url "https://api.modrinth.com/maven" }
+    maven { url "https://ivangeevo.github.io/btwr-shared-lib/" }
 
 }
 
@@ -64,7 +65,7 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     // BTWR Shared Library
-    modImplementation "maven.modrinth:btwr-shared-library:${project.btwr_sl_version}"
+    modImplementation("org.ivangeevo:btwr-shared-lib:${project.btwr_sl_version}")
 
     // Tough Environment
     modImplementation "maven.modrinth:tough-environment:${project.tough_environment_version}"

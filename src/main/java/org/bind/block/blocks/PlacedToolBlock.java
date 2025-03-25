@@ -13,10 +13,7 @@ import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.Properties;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.BlockMirror;
-import net.minecraft.util.BlockRotation;
-import net.minecraft.util.ItemScatterer;
+import net.minecraft.util.*;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -181,7 +178,7 @@ public class PlacedToolBlock extends BlockWithEntity {
 
         // If the player's main hand is empty, give the item to the player
         if (player.getMainHandStack().isEmpty()) {
-            player.setStackInHand(player.getActiveHand(), itemStack);
+            player.setStackInHand(Hand.MAIN_HAND, itemStack);
             player.playSound(SoundEvents.ENTITY_ITEM_PICKUP);
             world.removeBlock(pos, false);
             return ActionResult.SUCCESS;

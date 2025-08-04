@@ -1,5 +1,7 @@
 # List of changes
 
+# v1.3(dev)
+
 ## v1.2
 + Made axes placeable on Sturdy Trees stump blocks
 + Fixed a bug that set tools to player's offhand instead of main hand on pickup

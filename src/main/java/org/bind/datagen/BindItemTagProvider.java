@@ -12,14 +12,12 @@ import java.util.concurrent.CompletableFuture;
 
 public class BindItemTagProvider extends FabricTagProvider.ItemTagProvider {
 
-
     public BindItemTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> completableFuture) {
         super(output, completableFuture);
     }
 
     @Override
     protected void configure(RegistryWrapper.WrapperLookup arg) {
-
 
         getOrCreateTagBuilder(ModTags.Items.SPECIAL_MODDED_TOOLS)
                 // Tough Environment chisels
@@ -29,8 +27,24 @@ public class BindItemTagProvider extends FabricTagProvider.ItemTagProvider {
 
                 // Better With Time tools
                 .add(BwtItems.netheriteMattockItem)
-                .add(BwtItems.netheriteBattleAxeItem)
-        ;
+                .add(BwtItems.netheriteBattleAxeItem);
+
+        this.getOrCreateTagBuilder(ModTags.Items.AXES)
+                .forceAddTag(ItemTags.AXES)
+                .addOptional(BwtItems.netheriteBattleAxeItem.getRegistryEntry().registryKey());
+
+        this.getOrCreateTagBuilder(ModTags.Items.PICKAXES)
+                .forceAddTag(ItemTags.PICKAXES)
+                .addOptional(BwtItems.netheriteMattockItem.getRegistryEntry().registryKey());
+
+
+        this.getOrCreateTagBuilder(ModTags.Items.VANILLA_PLACEABLE_TOOLS)
+                .addTag(ModTags.Items.PICKAXES)
+                .addTag(ModTags.Items.AXES)
+                .forceAddTag(ItemTags.SHOVELS)
+                .forceAddTag(ItemTags.HOES)
+                .forceAddTag(ItemTags.SWORDS);
+
 
 
 

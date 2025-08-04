@@ -9,12 +9,11 @@ import org.bind.BindMod;
 import org.bind.block.blocks.*;
 
 public class ModBlocks {
+
     public static final Block PLACED_TOOL = Registry.register(
             Registries.BLOCK,
             Identifier.of(BindMod.MOD_ID, "placed_tool"),
-            new PlacedToolBlock(
-                    AbstractBlock.Settings.create().strength(0.1F)
-            )
+            new PlacedToolBlock(AbstractBlock.Settings.create().strength(0.1F))
     );
 
     public static void registerModBlocks() {

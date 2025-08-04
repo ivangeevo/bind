@@ -25,6 +25,16 @@ public class ModTags {
         /** Tools from other mods need to be put in this tag in order to be made placeable **/
         public static final TagKey<Item> SPECIAL_MODDED_TOOLS = createTag("special_modded_tools");
 
+        /** All tools that are considered valid pickaxes **/
+        public static final TagKey<Item> PICKAXES = createTag("pickaxes");
+
+        /** All tools that are considered valid shovels **/
+        public static final TagKey<Item> AXES = createTag("axes");
+
+        public static final TagKey<Item> VANILLA_PLACEABLE_TOOLS = createTag("vanilla_placeable_tools");
+
+
+
         private static TagKey<Item> createTag (String name) {
             return TagKey.of(RegistryKeys.ITEM, Identifier.of(BindMod.MOD_ID, name));
         }

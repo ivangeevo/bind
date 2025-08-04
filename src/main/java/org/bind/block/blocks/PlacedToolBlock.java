@@ -1,5 +1,6 @@
 package org.bind.block.blocks;
 
+import btwr.btwr_sl.tag.BTWRConventionalTags;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -8,6 +9,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ToolItem;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
@@ -24,7 +26,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import org.bind.block.entity.PlacedToolBE;
+import org.bind.tag.ModTags;
 import org.bind.util.PlaceableAsItem;
+import org.bind.util.ToolRenderManager;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -55,27 +59,31 @@ public class PlacedToolBlock extends BlockWithEntity {
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        Direction facing = state.get(FACING);
-        Direction horizontal = facing.getAxis().isHorizontal() ? facing : Direction.NORTH;
+    protected VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+        if (blockEntity instanceof PlacedToolBE be) {
+            Direction facing = state.get(FACING);
+            Direction horizontal = facing.getAxis().isHorizontal() ? facing : Direction.NORTH;
+            ItemStack toolStack = be.getToolStack();
+            if (!(toolStack.getItem() instanceof ToolItem)) {
+                return VoxelShapes.empty();
+            } else {
+                ToolRenderManager.BoundingBox toolBB = ToolRenderManager.BoundingBox.fromItem(toolStack.getItem());
+                float minHeight = toolBB.getMinHeight();
+                float maxHeight = toolBB.getMaxHeight();
+                float minWidth = toolBB.getMinWidth();
+                float maxWidth = toolBB.getMaxWidth();
+                if (toolStack.isIn(ModTags.Items.VANILLA_PLACEABLE_TOOLS)) {
+                    ToolRenderManager.Outlines.forDefault(state, SHAPES, minHeight, maxHeight, minWidth, maxWidth);
+                } else if (isChiselStack(toolStack)) {
+                    ToolRenderManager.Outlines.forChisels(state, SHAPES, minHeight, maxHeight, minWidth, maxWidth);
+                }
 
-        if (!(world.getBlockEntity(pos) instanceof PlacedToolBE be)) {
+                return SHAPES.get(horizontal);
+            }
+        } else {
             return VoxelShapes.empty();
         }
-
-        if (!(be.getToolStack().getItem() instanceof PlaceableAsItem placeableAsItem)) {
-            return VoxelShapes.empty();
-        }
-
-        float minHeight = placeableAsItem.bind$getBlockBoundingBoxMinHeightPixels();
-        float maxHeight = placeableAsItem.bind$getBlockBoundingBoxMaxHeightPixels();
-
-        float minWidth = placeableAsItem.bind$getBlockBoundingBoxMinWidthPixels();
-        float maxWidth = placeableAsItem.bind$getBlockBoundingBoxMaxWidthPixels();
-
-        placeableAsItem.bind$getOutlineShapesForTool(state, SHAPES, minHeight, maxHeight, minWidth, maxWidth);
-
-        return SHAPES.get(horizontal);
     }
 
     @Override
@@ -225,5 +233,10 @@ public class PlacedToolBlock extends BlockWithEntity {
             return Blocks.AIR.getDefaultState();
         }
         return state;
+    }
+
+    private boolean isChiselStack(ItemStack stack) {
+        return stack.isIn(BTWRConventionalTags.Items.ADVANCED_CHISELS)
+                || stack.isIn(BTWRConventionalTags.Items.MODERN_CHISELS);
     }
 }

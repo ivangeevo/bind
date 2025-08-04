@@ -1,77 +1,59 @@
 package org.bind.mixin;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.AxeItem;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.shape.VoxelShape;
-import org.bind.block.blocks.PlacedToolBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
+import net.minecraft.item.ToolItem;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import org.bind.util.PlaceableAsItem;
+import org.bind.util.PlaceableToolManager;
+import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
-
-import java.util.HashMap;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(AxeItem.class)
 public abstract class AxeItemMixin implements PlaceableAsItem {
-    @Override
-    public float bind$getVisualPitchDegrees() {
-        return 0f;
-    }
 
-    @Override
-    public float bind$getVisualVerticalOffsetPixels() {
-        return 5f;
-    }
-
-    @Override
-    public float bind$getVisualHorizontalOffsetPixels() {
-        return 0f;
-    }
-
-    @Override
-    public float bind$getBlockBoundingBoxMinHeightPixels() {
-        return 2f;
-    }
-
-    @Override
-    public float bind$getBlockBoundingBoxMaxHeightPixels() {
-        return 14f;
-    }
-
-    @Override
-    public void bind$getOutlineShapesForTool(BlockState state, HashMap<Direction, VoxelShape> shapesMap, float minHeight, float maxHeight, float minWidth, float maxWidth) {
-        float hOffsetAmount = 2;
-        float wOffsetAmount = 4;
-
-        switch (state.get(PlacedToolBlock.FACE)) {
-            case WALL -> {
-                switch (state.get(PlacedToolBlock.FACING)) {
-                    case NORTH -> shapesMap.put(Direction.NORTH, Block.createCuboidShape(7.5, minHeight, minWidth, 8.5, maxHeight, maxWidth - wOffsetAmount));
-                    case SOUTH -> shapesMap.put(Direction.SOUTH, Block.createCuboidShape(7.5, minHeight, minWidth + wOffsetAmount, 8.5, maxHeight, maxWidth));
-                    case WEST -> shapesMap.put(Direction.WEST, Block.createCuboidShape(minWidth, minHeight, 7.5, maxWidth - wOffsetAmount, maxHeight, 8.5));
-                    case EAST -> shapesMap.put(Direction.EAST, Block.createCuboidShape(minWidth + wOffsetAmount, minHeight, 7.5, maxWidth, maxHeight, 8.5));
-                    default -> {}
-                }
-            }
-            case FLOOR -> {
-                switch (state.get(PlacedToolBlock.FACING)) {
-                    case NORTH -> shapesMap.put(Direction.NORTH, Block.createCuboidShape(7.5, minHeight - hOffsetAmount, minWidth + hOffsetAmount, 8.5, maxHeight - hOffsetAmount, maxWidth - hOffsetAmount));
-                    case SOUTH -> shapesMap.put(Direction.SOUTH, Block.createCuboidShape(7.5, minHeight - hOffsetAmount, minWidth + hOffsetAmount, 8.5, maxHeight - hOffsetAmount, maxWidth - hOffsetAmount));
-                    case WEST -> shapesMap.put(Direction.WEST, Block.createCuboidShape(minWidth + hOffsetAmount, minHeight - hOffsetAmount, 7.5, maxWidth - hOffsetAmount, maxHeight - hOffsetAmount, 8.5));
-                    case EAST -> shapesMap.put(Direction.EAST, Block.createCuboidShape(minWidth + hOffsetAmount, minHeight - hOffsetAmount, 7.5, maxWidth - hOffsetAmount, maxHeight - hOffsetAmount, 8.5));
-                    default -> {}
-                }
-            }
-            case CEILING -> {
-                switch (state.get(PlacedToolBlock.FACING)) {
-                    case NORTH -> shapesMap.put(Direction.NORTH, Block.createCuboidShape(7.5, minHeight + hOffsetAmount, minWidth + hOffsetAmount, 8.5, maxHeight + hOffsetAmount, maxWidth - hOffsetAmount));
-                    case SOUTH -> shapesMap.put(Direction.SOUTH, Block.createCuboidShape(7.5, minHeight + hOffsetAmount, minWidth + hOffsetAmount, 8.5, maxHeight + hOffsetAmount, maxWidth - hOffsetAmount));
-                    case WEST -> shapesMap.put(Direction.WEST, Block.createCuboidShape(minWidth + hOffsetAmount, minHeight + hOffsetAmount, 7.5, maxWidth - hOffsetAmount, maxHeight + hOffsetAmount, 8.5));
-                    case EAST -> shapesMap.put(Direction.EAST, Block.createCuboidShape(minWidth + hOffsetAmount, minHeight + hOffsetAmount, 7.5, maxWidth - hOffsetAmount, maxHeight + hOffsetAmount, 8.5));
-                    default -> {}
-                }
-            }
+    @Inject(
+            method = {"useOnBlock"},
+            at = {@At("HEAD")},
+            cancellable = true
+    )
+    private void preventStrippingWhenPlacingTool(ItemUsageContext context, CallbackInfoReturnable<ActionResult> cir) {
+        if (this.shouldPlaceTool(context)) {
+            cir.setReturnValue(ActionResult.FAIL);
         }
 
     }
+
+    @Unique
+    private boolean shouldPlaceTool(ItemUsageContext context) {
+        PlayerEntity player = context.getPlayer();
+        if (player != null /**&& this.isCtrlPressed()**/) {
+            ItemStack stack = context.getStack();
+            if (!(stack.getItem() instanceof ToolItem)) {
+                return false;
+            } else {
+                BlockPos placePos = context.getBlockPos().offset(context.getSide());
+                World world = context.getWorld();
+                return PlaceableToolManager.isValidTool(stack) && world.getBlockState(placePos).isReplaceable();
+            }
+        } else {
+            return false;
+        }
+    }
+
+    /**
+    @Unique
+    private boolean isCtrlPressed() {
+        long windowHandle = class_310.method_1551().method_22683().method_4490();
+        return GLFW.glfwGetKey(windowHandle, 341) == 1 || GLFW.glfwGetKey(windowHandle, 345) == 1;
+    }
+    **/
 }

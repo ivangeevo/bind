@@ -11,13 +11,13 @@ import java.util.concurrent.CompletableFuture;
 
 public class BindBlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
-
     public BindBlockTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
         super(output, registriesFuture);
     }
 
     @Override
     protected void configure(RegistryWrapper.WrapperLookup arg) {
+
         getOrCreateTagBuilder(ModTags.Blocks.AGGREGATE_SOUND_BLOCKS)
                 .forceAddTag(BlockTags.SHOVEL_MINEABLE)
                 .forceAddTag(BlockTags.HOE_MINEABLE);
@@ -29,8 +29,6 @@ public class BindBlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
         getOrCreateTagBuilder(ModTags.Blocks.WOOD_SOUND_BLOCKS)
                 .forceAddTag(BlockTags.AXE_MINEABLE)
-                .forceAddTag(BTWRConventionalTags.Blocks.STUMP_BLOCKS)
-
-        ;
+                .forceAddTag(BTWRConventionalTags.Blocks.STUMP_BLOCKS);
     }
 }

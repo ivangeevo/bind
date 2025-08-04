@@ -1,6 +1,7 @@
 # List of changes
 
 # v1.3(dev)
++ Changed some code internally to split client side code into it's separate package
 
 ## v1.2
 + Made axes placeable on Sturdy Trees stump blocks

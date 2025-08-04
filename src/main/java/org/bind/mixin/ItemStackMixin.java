@@ -1,54 +1,76 @@
 package org.bind.mixin;
 
-import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.bind.util.PlaceableToolManager;
+import org.bind.util.SharedInputState;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static org.lwjgl.glfw.GLFW.*;
-
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin {
 
-    @Inject(method = "useOnBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/Item;useOnBlock(Lnet/minecraft/item/ItemUsageContext;)Lnet/minecraft/util/ActionResult;"), cancellable = true)
-    private void onUseOnBlock(ItemUsageContext context, CallbackInfoReturnable<ActionResult> cir, @Local Item item) {
-        World world = context.getWorld();
+    @Shadow public abstract Item getItem();
 
-        if (!(item instanceof ToolItem) || !isCtrlPressed() || world.isClient()) {
-            return;
+    @Inject(method = "useOnBlock", at = @At("HEAD"), cancellable = true)
+    private void cancelOffhandUse(ItemUsageContext context, CallbackInfoReturnable<ActionResult> cir) {
+        if (context.getHand() == Hand.OFF_HAND) {
+            if (this.isCtrlPressed() && this.isHoldingPlaceableTool(context.getPlayer())) {
+                cir.setReturnValue(ActionResult.FAIL);
+            }
         }
+
+    }
+
+    @Inject(
+            method = "useOnBlock",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/item/Item;useOnBlock(Lnet/minecraft/item/ItemUsageContext;)Lnet/minecraft/util/ActionResult;"),
+            cancellable = true
+    )
+    private void onUseOnBlock(ItemUsageContext context, CallbackInfoReturnable<ActionResult> cir) {
+        World world = context.getWorld();
+        if (world.isClient) return;
+        if (!(this.getItem() instanceof ToolItem)) return;
+        if (context.getPlayer() == null && !this.isCtrlPressed()) return;
 
         BlockPos pos = context.getBlockPos();
         BlockPos placePos = pos.offset(context.getSide());
+        if (PlaceableToolManager.isValidTool(context.getStack()) && world.getBlockState(placePos).isReplaceable()) {
+            if (!world.getBlockState(context.getBlockPos()).isOf(Blocks.SHORT_GRASS)) {
+                boolean success = PlaceableToolManager.placeToolBlock(world, placePos, context);
+                if (success) {
+                    cir.setReturnValue(ActionResult.SUCCESS);
+                }
 
-        if (!PlaceableToolManager.isValidTool(context.getStack()) || !world.getBlockState(placePos).isReplaceable()) {
-            return;
-        }
+            }
 
-        // TODO: Make this a more generic check to disallow placing on certain blocks like this one if possible
-        if (world.getBlockState(context.getBlockPos()).isOf(Blocks.SHORT_GRASS)) {
-            return;
-        }
 
-        boolean success = PlaceableToolManager.placeToolBlock(world, placePos, context);
-        if (success) {
-            cir.setReturnValue(ActionResult.SUCCESS);
         }
     }
 
+    @Unique private boolean isCtrlPressed() {
+        return /**SharedInputState.toolPlacementHeld**/ false;
+    }
+
+    /**
+     @Unique private boolean isCtrlPressed() {
+     long windowHandle = MinecraftClient.getInstance().getWindow().getHandle();
+     return glfwGetKey(windowHandle, GLFW_KEY_LEFT_CONTROL) == 1 || glfwGetKey(windowHandle, GLFW_KEY_RIGHT_CONTROL) == 1;
+     }
+     **/
+
     @Unique
-    private boolean isCtrlPressed() {
-        long windowHandle = MinecraftClient.getInstance().getWindow().getHandle();
-        return glfwGetKey(windowHandle, GLFW_KEY_LEFT_CONTROL) == 1 || glfwGetKey(windowHandle, GLFW_KEY_RIGHT_CONTROL) == 1;
+    private boolean isHoldingPlaceableTool(PlayerEntity player) {
+        return player != null && player.getMainHandStack().getItem() instanceof ToolItem;
     }
 
 

@@ -1,6 +1,8 @@
 package org.bind;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import org.bind.network.CtrlKeyHeldC2SPayload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.bind.block.ModBlocks;
@@ -16,6 +18,9 @@ public class BindMod implements ModInitializer {
     public void onInitialize() {
         ModBlocks.registerModBlocks();
         ModBlockEntities.registerBlockEntities();
+
+        PayloadTypeRegistry.playC2S().register(CtrlKeyHeldC2SPayload.PAYLOAD_ID, CtrlKeyHeldC2SPayload.CODEC);
+
     }
 
 }

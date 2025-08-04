@@ -28,7 +28,6 @@ public class PlacedToolBE extends BlockEntity {
         }
     }
 
-
     @Override
     protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
         super.writeNbt(nbt, registryLookup);

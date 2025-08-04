@@ -15,18 +15,13 @@
   "icon": "icon.png",
   "environment": "*",
   "entrypoints": {
-    "client": [
-      "org.bind.client.BindModClient"
-    ],
-    "main": [
-      "org.bind.BindMod"
-    ],
-    "fabric-datagen": [
-      "org.bind.BindModDataGenerator"
-    ]
+    "client": ["org.bind.BindModClient"],
+    "main": ["org.bind.BindMod"],
+    "fabric-datagen": ["org.bind.BindModDataGenerator"]
   },
   "mixins": [
-    "bind.mixins.json"
+    "bind.mixins.json",
+    "bind.client.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=${loader_version}",

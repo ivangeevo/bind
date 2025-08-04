@@ -34,7 +34,7 @@ public class BindModClient implements ClientModInitializer
             if (isHeld != lastHeldState) {
                 ClientPlayNetworking.send(new CtrlKeyHeldC2SPayload(isHeld));
                 lastHeldState = isHeld;
-                SharedInputState.toolPlacementHeld = isHeld;
+                SharedInputState.toolPlacementInputHeld = isHeld;
             }
         });
 

@@ -1,5 +1,6 @@
 package org.bind.util;
 
+import btwr.btwr_sl.tag.BTWRConventionalTags;
 import com.bwt.items.BwtItems;
 import com.bwt.tags.BwtBlockTags;
 import net.minecraft.advancement.criterion.Criteria;
@@ -9,6 +10,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
@@ -24,32 +27,18 @@ public class PlaceableToolManager {
      * Determines the type of tool based on the item stack.
      */
     public static boolean isValidTool(ItemStack tool) {
-        if (!(tool.getItem() instanceof ToolItem toolItem)) {
+        if (!(tool.getItem() instanceof ToolItem)) {
             return false;
+        } else {
+            return tool.isIn(ModTags.Items.PICKAXES)
+                    || tool.isIn(ModTags.Items.AXES)
+                    || tool.isIn(ItemTags.SHOVELS)
+                    || tool.isIn(ItemTags.HOES)
+                    || tool.isIn(ItemTags.SWORDS)
+                    || tool.isIn(BTWRConventionalTags.Items.ADVANCED_CHISELS)
+                    || tool.isIn(BTWRConventionalTags.Items.MODERN_CHISELS);
         }
 
-        if (toolItem.getMaterial() != ToolMaterials.WOOD
-                && toolItem.getMaterial() != ToolMaterials.STONE
-                && toolItem.getMaterial() != ToolMaterials.IRON
-                && toolItem.getMaterial() != ToolMaterials.DIAMOND
-                && toolItem.getMaterial() != ToolMaterials.NETHERITE
-                && !isViableChiselToolMaterial(toolItem)) {
-            return false;
-        }
-
-        return tool.isIn(ItemTags.PICKAXES)
-                || tool.isIn(ItemTags.AXES)
-                || tool.isIn(ItemTags.SHOVELS)
-                || tool.isIn(ItemTags.HOES)
-                || tool.isIn(ItemTags.SWORDS)
-                || tool.isIn(ModTags.Items.SPECIAL_MODDED_TOOLS)
-                ;
-    }
-
-    private static boolean isViableChiselToolMaterial(ToolItem toolItem) {
-        return toolItem.getMaterial() == ChiselToolMaterials.WOOD
-                || toolItem.getMaterial() != ChiselToolMaterials.IRON
-                || toolItem.getMaterial() != ChiselToolMaterials.DIAMOND;
     }
 
     /**
@@ -83,7 +72,7 @@ public class PlaceableToolManager {
         }
 
         assert playerEntity != null;
-        ToolPlacementSoundManager.playPlacementSound(stateAtPos, playerEntity);
+        playPlacementSound(stateAtPos, playerEntity);
 
         world.emitGameEvent(GameEvent.BLOCK_PLACE, pos, GameEvent.Emitter.of(playerEntity, placedState));
         originalTool.decrementUnlessCreative(1, playerEntity);
@@ -120,6 +109,29 @@ public class PlaceableToolManager {
         }
 
         return true; // Allow all other tools
+    }
+
+    public static void playPlacementSound(BlockState state, PlayerEntity player) {
+        World world = player.getWorld();
+        BlockPos thisPos = player.getBlockPos();
+        SoundEvent sound = null;
+        float volume = 0.1F;
+        float pitch = 1.0F;
+
+        // Loop through the enum to find the matching tag
+        for (ToolPlacementSoundConfig config : ToolPlacementSoundConfig.values()) {
+            if (state.isIn(config.getTag())) {
+                sound = config.getSound();
+                volume = config.getVolume();
+                pitch = config.getBasePitch() + (world.random.nextFloat() * config.getPitchVariance());
+                break;
+            }
+        }
+
+        // Play the sound if one was found
+        if (sound != null) {
+            world.playSound(null, thisPos, sound, SoundCategory.BLOCKS, volume, pitch);
+        }
     }
 
 }

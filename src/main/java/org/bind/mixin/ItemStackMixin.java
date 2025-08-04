@@ -23,12 +23,9 @@ public abstract class ItemStackMixin {
 
     @Inject(method = "useOnBlock", at = @At("HEAD"), cancellable = true)
     private void cancelOffhandUse(ItemUsageContext context, CallbackInfoReturnable<ActionResult> cir) {
-        if (context.getHand() == Hand.OFF_HAND) {
-            if (this.isCtrlPressed() && this.isHoldingPlaceableTool(context.getPlayer())) {
-                cir.setReturnValue(ActionResult.FAIL);
-            }
+        if (context.getHand() == Hand.OFF_HAND && SharedInputState.getToolPlacementInputHeld() && this.isHoldingPlaceableTool(context.getPlayer())) {
+            cir.setReturnValue(ActionResult.FAIL);
         }
-
     }
 
     @Inject(
@@ -38,27 +35,19 @@ public abstract class ItemStackMixin {
     )
     private void onUseOnBlock(ItemUsageContext context, CallbackInfoReturnable<ActionResult> cir) {
         World world = context.getWorld();
-        if (world.isClient) return;
-        if (!(this.getItem() instanceof ToolItem)) return;
-        if (context.getPlayer() == null && !this.isCtrlPressed()) return;
+        if (this.getItem() instanceof ToolItem && SharedInputState.getToolPlacementInputHeld() && !world.isClient) {
 
-        BlockPos pos = context.getBlockPos();
-        BlockPos placePos = pos.offset(context.getSide());
-        if (PlaceableToolManager.isValidTool(context.getStack()) && world.getBlockState(placePos).isReplaceable()) {
-            if (!world.getBlockState(context.getBlockPos()).isOf(Blocks.SHORT_GRASS)) {
-                boolean success = PlaceableToolManager.placeToolBlock(world, placePos, context);
-                if (success) {
+            BlockPos pos = context.getBlockPos();
+            BlockPos placePos = pos.offset(context.getSide());
+            if (PlaceableToolManager.isValidTool(context.getStack()) && world.getBlockState(placePos).isReplaceable()) {
+                if (!world.getBlockState(context.getBlockPos()).isOf(Blocks.SHORT_GRASS)) {
+                    boolean success = PlaceableToolManager.placeToolBlock(world, placePos, context);
+                    if (success) {
                     cir.setReturnValue(ActionResult.SUCCESS);
+                    }
                 }
-
             }
-
-
         }
-    }
-
-    @Unique private boolean isCtrlPressed() {
-        return /**SharedInputState.toolPlacementHeld**/ false;
     }
 
     /**

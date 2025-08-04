@@ -10,6 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.bind.util.PlaceableAsItem;
 import org.bind.util.PlaceableToolManager;
+import org.bind.util.SharedInputState;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -34,26 +35,16 @@ public abstract class AxeItemMixin implements PlaceableAsItem {
 
     @Unique
     private boolean shouldPlaceTool(ItemUsageContext context) {
-        PlayerEntity player = context.getPlayer();
-        if (player != null /**&& this.isCtrlPressed()**/) {
-            ItemStack stack = context.getStack();
-            if (!(stack.getItem() instanceof ToolItem)) {
-                return false;
-            } else {
-                BlockPos placePos = context.getBlockPos().offset(context.getSide());
-                World world = context.getWorld();
-                return PlaceableToolManager.isValidTool(stack) && world.getBlockState(placePos).isReplaceable();
-            }
-        } else {
+        if (context.getPlayer() == null && !SharedInputState.getToolPlacementInputHeld()) return false;
+
+        ItemStack stack = context.getStack();
+        if (!(stack.getItem() instanceof ToolItem)) {
             return false;
+        } else {
+            BlockPos placePos = context.getBlockPos().offset(context.getSide());
+            World world = context.getWorld();
+            return PlaceableToolManager.isValidTool(stack) && world.getBlockState(placePos).isReplaceable();
         }
     }
 
-    /**
-    @Unique
-    private boolean isCtrlPressed() {
-        long windowHandle = class_310.method_1551().method_22683().method_4490();
-        return GLFW.glfwGetKey(windowHandle, 341) == 1 || GLFW.glfwGetKey(windowHandle, 345) == 1;
-    }
-    **/
 }

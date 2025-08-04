@@ -5,12 +5,20 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.util.Identifier;
 import org.bind.tag.ModTags;
 import org.tough_environment.item.ModItems;
 
 import java.util.concurrent.CompletableFuture;
 
 public class BindItemTagProvider extends FabricTagProvider.ItemTagProvider {
+
+    private final Identifier BWT_MATTOCK = Identifier.of("bwt", "netherite_mattock");
+    private final Identifier BWT_BATTLE_AXE = Identifier.of("bwt", "netherite_battle_axe");
+
+    private final Identifier TE_CHISEL_WOOD = Identifier.of("tough_environment", "chisel_wood");
+    private final Identifier TE_CHISEL_IRON = Identifier.of("tough_environment", "chisel_iron");
+    private final Identifier TE_CHISEL_DIAMOND = Identifier.of("tough_environment", "chisel_diamond");
 
     public BindItemTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> completableFuture) {
         super(output, completableFuture);
@@ -21,21 +29,21 @@ public class BindItemTagProvider extends FabricTagProvider.ItemTagProvider {
 
         getOrCreateTagBuilder(ModTags.Items.SPECIAL_MODDED_TOOLS)
                 // Tough Environment chisels
-                .add(ModItems.CHISEL_WOOD)
-                .add(ModItems.CHISEL_IRON)
-                .add(ModItems.CHISEL_DIAMOND)
+                .addOptional(TE_CHISEL_WOOD)
+                .addOptional(TE_CHISEL_IRON)
+                .addOptional(TE_CHISEL_DIAMOND)
 
                 // Better With Time tools
-                .add(BwtItems.netheriteMattockItem)
-                .add(BwtItems.netheriteBattleAxeItem);
+                .addOptional(BWT_MATTOCK)
+                .addOptional(BWT_BATTLE_AXE);
 
         this.getOrCreateTagBuilder(ModTags.Items.AXES)
                 .forceAddTag(ItemTags.AXES)
-                .addOptional(BwtItems.netheriteBattleAxeItem.getRegistryEntry().registryKey());
+                .addOptional(BWT_BATTLE_AXE);
 
         this.getOrCreateTagBuilder(ModTags.Items.PICKAXES)
                 .forceAddTag(ItemTags.PICKAXES)
-                .addOptional(BwtItems.netheriteMattockItem.getRegistryEntry().registryKey());
+                .addOptional(BWT_MATTOCK);
 
 
         this.getOrCreateTagBuilder(ModTags.Items.VANILLA_PLACEABLE_TOOLS)
@@ -44,9 +52,6 @@ public class BindItemTagProvider extends FabricTagProvider.ItemTagProvider {
                 .forceAddTag(ItemTags.SHOVELS)
                 .forceAddTag(ItemTags.HOES)
                 .forceAddTag(ItemTags.SWORDS);
-
-
-
-
     }
+
 }

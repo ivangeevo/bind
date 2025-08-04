@@ -1,9 +1,24 @@
 {
   "values": [
-    "tough_environment:chisel_wood",
-    "tough_environment:chisel_iron",
-    "tough_environment:chisel_diamond",
-    "bwt:netherite_mattock",
-    "bwt:netherite_battle_axe"
+    {
+      "id": "tough_environment:chisel_wood",
+      "required": false
+    },
+    {
+      "id": "tough_environment:chisel_iron",
+      "required": false
+    },
+    {
+      "id": "tough_environment:chisel_diamond",
+      "required": false
+    },
+    {
+      "id": "bwt:netherite_mattock",
+      "required": false
+    },
+    {
+      "id": "bwt:netherite_battle_axe",
+      "required": false
+    }
   ]
 }

@@ -7,16 +7,16 @@ import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.util.Identifier;
 import org.bind.BindMod;
 
-public record CtrlKeyHeldC2SPayload(boolean held) implements CustomPayload {
+public record PlaceToolKeyHeldC2SPayload(boolean held) implements CustomPayload {
 
     public static final Identifier ID = Identifier.of(BindMod.MOD_ID, "ctrl_key_held");
-    public static final CustomPayload.Id<CtrlKeyHeldC2SPayload> PAYLOAD_ID = new CustomPayload.Id<>(ID);
+    public static final CustomPayload.Id<PlaceToolKeyHeldC2SPayload> PAYLOAD_ID = new CustomPayload.Id<>(ID);
 
-    public static final PacketCodec<RegistryByteBuf, CtrlKeyHeldC2SPayload> CODEC =
+    public static final PacketCodec<RegistryByteBuf, PlaceToolKeyHeldC2SPayload> CODEC =
             PacketCodec.tuple(
                     PacketCodecs.BOOL,
-                    CtrlKeyHeldC2SPayload::held,
-                    CtrlKeyHeldC2SPayload::new
+                    PlaceToolKeyHeldC2SPayload::held,
+                    PlaceToolKeyHeldC2SPayload::new
             );
 
     @Override

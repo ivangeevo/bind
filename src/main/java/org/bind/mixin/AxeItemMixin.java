@@ -8,10 +8,8 @@ import net.minecraft.item.ToolItem;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.bind.util.PlaceableAsItem;
 import org.bind.util.PlaceableToolManager;
 import org.bind.util.SharedInputState;
-import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,32 +17,31 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(AxeItem.class)
-public abstract class AxeItemMixin implements PlaceableAsItem {
+public abstract class AxeItemMixin {
 
-    @Inject(
-            method = {"useOnBlock"},
-            at = {@At("HEAD")},
-            cancellable = true
-    )
+    @Inject(method = "useOnBlock", at = @At("HEAD"), cancellable = true)
     private void preventStrippingWhenPlacingTool(ItemUsageContext context, CallbackInfoReturnable<ActionResult> cir) {
         if (this.shouldPlaceTool(context)) {
             cir.setReturnValue(ActionResult.FAIL);
         }
-
     }
 
     @Unique
     private boolean shouldPlaceTool(ItemUsageContext context) {
-        if (context.getPlayer() == null && !SharedInputState.getToolPlacementInputHeld()) return false;
-
-        ItemStack stack = context.getStack();
-        if (!(stack.getItem() instanceof ToolItem)) {
-            return false;
+        PlayerEntity player = context.getPlayer();
+        if (player != null && SharedInputState.getToolPlacementInputHeld()) {
+            ItemStack stack = context.getStack();
+            if (!(stack.getItem() instanceof ToolItem)) {
+                return false;
+            } else {
+                BlockPos placePos = context.getBlockPos().offset(context.getSide());
+                World world = context.getWorld();
+                return PlaceableToolManager.isValidTool(stack) && world.getBlockState(placePos).isReplaceable();
+            }
         } else {
-            BlockPos placePos = context.getBlockPos().offset(context.getSide());
-            World world = context.getWorld();
-            return PlaceableToolManager.isValidTool(stack) && world.getBlockState(placePos).isReplaceable();
+            return false;
         }
+
     }
 
 }

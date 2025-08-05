@@ -1,6 +1,13 @@
 {
   "values": [
     "#minecraft:mineable/axe",
-    "#c:stump_blocks"
+    "#minecraft:logs",
+    "#minecraft:planks",
+    "#minecraft:slabs",
+    "#minecraft:stairs",
+    {
+      "id": "#c:stump_blocks",
+      "required": false
+    }
   ]
 }

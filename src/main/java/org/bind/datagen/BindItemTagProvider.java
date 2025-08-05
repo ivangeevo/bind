@@ -1,13 +1,11 @@
 package org.bind.datagen;
 
-import com.bwt.items.BwtItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.util.Identifier;
 import org.bind.tag.ModTags;
-import org.tough_environment.item.ModItems;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -28,12 +26,12 @@ public class BindItemTagProvider extends FabricTagProvider.ItemTagProvider {
     protected void configure(RegistryWrapper.WrapperLookup arg) {
 
         getOrCreateTagBuilder(ModTags.Items.SPECIAL_MODDED_TOOLS)
-                // Tough Environment chisels
+                // Tough Environment
                 .addOptional(TE_CHISEL_WOOD)
                 .addOptional(TE_CHISEL_IRON)
                 .addOptional(TE_CHISEL_DIAMOND)
 
-                // Better With Time tools
+                // Better With Time
                 .addOptional(BWT_MATTOCK)
                 .addOptional(BWT_BATTLE_AXE);
 
@@ -44,7 +42,6 @@ public class BindItemTagProvider extends FabricTagProvider.ItemTagProvider {
         this.getOrCreateTagBuilder(ModTags.Items.PICKAXES)
                 .forceAddTag(ItemTags.PICKAXES)
                 .addOptional(BWT_MATTOCK);
-
 
         this.getOrCreateTagBuilder(ModTags.Items.VANILLA_PLACEABLE_TOOLS)
                 .addTag(ModTags.Items.PICKAXES)

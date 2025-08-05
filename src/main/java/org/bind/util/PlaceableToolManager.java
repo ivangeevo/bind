@@ -96,7 +96,7 @@ public class PlaceableToolManager {
             return stateAtPos.isIn(ModTags.Blocks.WOOD_SOUND_BLOCKS);
         }
 
-        if (toolStack.isOf(ModItems.CHISEL_IRON) || toolStack.isOf(ModItems.CHISEL_DIAMOND)) {
+        if (toolStack.isIn(BTWRConventionalTags.Items.ADVANCED_CHISELS)) {
             return stateAtPos.isIn(ModTags.Blocks.STONE_SOUND_BLOCKS);
         }
 

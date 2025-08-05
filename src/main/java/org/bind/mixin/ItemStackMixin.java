@@ -50,12 +50,6 @@ public abstract class ItemStackMixin {
         }
     }
 
-    /**
-     @Unique private boolean isCtrlPressed() {
-     long windowHandle = MinecraftClient.getInstance().getWindow().getHandle();
-     return glfwGetKey(windowHandle, GLFW_KEY_LEFT_CONTROL) == 1 || glfwGetKey(windowHandle, GLFW_KEY_RIGHT_CONTROL) == 1;
-     }
-     **/
 
     @Unique
     private boolean isHoldingPlaceableTool(PlayerEntity player) {

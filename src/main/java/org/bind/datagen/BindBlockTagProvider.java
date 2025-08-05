@@ -18,17 +18,22 @@ public class BindBlockTagProvider extends FabricTagProvider.BlockTagProvider {
     @Override
     protected void configure(RegistryWrapper.WrapperLookup arg) {
 
-        getOrCreateTagBuilder(ModTags.Blocks.AGGREGATE_SOUND_BLOCKS)
+        this.getOrCreateTagBuilder(ModTags.Blocks.AGGREGATE_SOUND_BLOCKS)
                 .forceAddTag(BlockTags.SHOVEL_MINEABLE)
                 .forceAddTag(BlockTags.HOE_MINEABLE);
-
-        getOrCreateTagBuilder(ModTags.Blocks.STONE_SOUND_BLOCKS)
+        
+        this.getOrCreateTagBuilder(ModTags.Blocks.STONE_SOUND_BLOCKS)
                 .forceAddTag(BlockTags.PICKAXE_MINEABLE)
                 .forceAddTag(BlockTags.BASE_STONE_OVERWORLD)
                 .forceAddTag(BlockTags.BASE_STONE_NETHER);
-
-        getOrCreateTagBuilder(ModTags.Blocks.WOOD_SOUND_BLOCKS)
+        
+        this.getOrCreateTagBuilder(ModTags.Blocks.WOOD_SOUND_BLOCKS)
                 .forceAddTag(BlockTags.AXE_MINEABLE)
-                .forceAddTag(BTWRConventionalTags.Blocks.STUMP_BLOCKS);
+                .forceAddTag(BlockTags.LOGS)
+                .forceAddTag(BlockTags.PLANKS)
+                .forceAddTag(BlockTags.SLABS)
+                .forceAddTag(BlockTags.STAIRS)
+                .addOptionalTag(BTWRConventionalTags.Blocks.STUMP_BLOCKS);
+
     }
 }

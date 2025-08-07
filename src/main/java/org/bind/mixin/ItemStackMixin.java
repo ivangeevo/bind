@@ -21,9 +21,10 @@ public abstract class ItemStackMixin {
 
     @Shadow public abstract Item getItem();
 
+    // Cancels offhand useOnBlock action when trying to place a tool, so the two don't overlap
     @Inject(method = "useOnBlock", at = @At("HEAD"), cancellable = true)
     private void cancelOffhandUse(ItemUsageContext context, CallbackInfoReturnable<ActionResult> cir) {
-        if (context.getHand() == Hand.OFF_HAND && SharedInputState.getToolPlacementInputHeld() && this.isHoldingPlaceableTool(context.getPlayer())) {
+        if (isTryingOffhandToolPlacement(context)) {
             cir.setReturnValue(ActionResult.FAIL);
         }
     }
@@ -50,6 +51,12 @@ public abstract class ItemStackMixin {
         }
     }
 
+    @Unique
+    private boolean isTryingOffhandToolPlacement(ItemUsageContext context) {
+        return context.getHand() == Hand.OFF_HAND
+                && SharedInputState.getToolPlacementInputHeld()
+                && this.isHoldingPlaceableTool(context.getPlayer());
+    }
 
     @Unique
     private boolean isHoldingPlaceableTool(PlayerEntity player) {

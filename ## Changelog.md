@@ -2,6 +2,7 @@
 
 # v1.4(dev)
 + Changed some code internally to split client side code into it's separate package
++ Fixed a bug with the mod not working on dedicated servers and causing a crash
 + Updated the mod to Fabric API 0.116.4, Fabric Loader 0.16.14 & BTWR: Shared Library 0.56
 
 # v1.3

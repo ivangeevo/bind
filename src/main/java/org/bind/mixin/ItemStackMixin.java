@@ -68,5 +68,4 @@ public abstract class ItemStackMixin {
         return player != null && player.getMainHandStack().getItem() instanceof ToolItem;
     }
 
-
 }

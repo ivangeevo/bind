@@ -22,27 +22,32 @@ public abstract class AxeItemMixin {
 
     @Inject(method = "useOnBlock", at = @At("HEAD"), cancellable = true)
     private void preventStrippingWhenPlacingTool(ItemUsageContext context, CallbackInfoReturnable<ActionResult> cir) {
-        if (this.shouldPlaceTool(context)) {
-            cir.setReturnValue(ActionResult.FAIL);
+        if (context.getWorld().isClient()) {
+            // Skip input state check entirely and always cancel.
+            // This prevents flash by blocking the strip early.
+            cir.setReturnValue(ActionResult.SUCCESS);
+            return;
+        }
+
+        // Server-side: check the actual player input state via your synced system
+        PlayerEntity player = context.getPlayer();
+        if (player instanceof ServerPlayerEntity serverPlayer && shouldPlaceToolServer(context, serverPlayer)) {
+            cir.setReturnValue(ActionResult.SUCCESS);
         }
     }
 
     @Unique
-    private boolean shouldPlaceTool(ItemUsageContext context) {
-        PlayerEntity player = context.getPlayer();
-        if (player != null && ServerSharedInputState.isHeld(player)) {
-            ItemStack stack = context.getStack();
-            if (!(stack.getItem() instanceof ToolItem)) {
-                return false;
-            } else {
-                BlockPos placePos = context.getBlockPos().offset(context.getSide());
-                World world = context.getWorld();
-                return PlaceableToolManager.isValidTool(stack) && world.getBlockState(placePos).isReplaceable();
-            }
-        } else {
-            return false;
-        }
+    private boolean shouldPlaceToolServer(ItemUsageContext context, ServerPlayerEntity player) {
+        if (!ServerSharedInputState.isHeld(player)) return false;
 
+        ItemStack stack = context.getStack();
+        if (!(stack.getItem() instanceof ToolItem)) return false;
+
+        BlockPos placePos = context.getBlockPos().offset(context.getSide());
+        World world = context.getWorld();
+
+        return PlaceableToolManager.isValidTool(stack)
+                && world.getBlockState(placePos).isReplaceable();
     }
 
 }

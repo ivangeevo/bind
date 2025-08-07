@@ -34,7 +34,6 @@ repositories {
 
     // Modrinth maven
     maven { url "https://api.modrinth.com/maven" }
-    maven { url "https://ivangeevo.github.io/btwr-shared-lib/" }
 
 }
 

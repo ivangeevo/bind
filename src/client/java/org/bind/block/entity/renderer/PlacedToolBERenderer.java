@@ -8,13 +8,14 @@ import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ToolItem;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import org.bind.block.blocks.PlacedToolBlock;
 import org.bind.block.entity.PlacedToolBE;
-import org.bind.util.PlaceableAsItem;
+import org.bind.util.ToolRenderManager;
 import org.jetbrains.annotations.Nullable;
 
 public class PlacedToolBERenderer implements BlockEntityRenderer<PlacedToolBE> {
@@ -29,8 +30,8 @@ public class PlacedToolBERenderer implements BlockEntityRenderer<PlacedToolBE> {
     public void render(PlacedToolBE entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
         ItemStack itemStack = entity.getToolStack();
         BlockState state = entity.getCachedState();
-        PlaceableAsItem placeableAsItem = null;
-        if (itemStack.getItem() instanceof PlaceableAsItem placeableAsItem1) {
+        ToolItem placeableAsItem = null;
+        if (itemStack.getItem() instanceof ToolItem placeableAsItem1) {
             placeableAsItem = placeableAsItem1;
         }
 
@@ -66,12 +67,13 @@ public class PlacedToolBERenderer implements BlockEntityRenderer<PlacedToolBE> {
         }
     }
 
-    private void applyVisualOffset(MatrixStack matrices, BlockState state, @Nullable PlaceableAsItem placeableAsItem) {
-        float verticalFloorOffset = 0.25f;
-        float horizontalFloorOffset = 0f;
+    private void applyVisualOffset(MatrixStack matrices, BlockState state, @Nullable ToolItem placeableAsItem) {
+        float verticalFloorOffset = 0.25F;
+        float horizontalFloorOffset = 0.0F;
+        ToolRenderManager.VisualOffsets visualOffsets = ToolRenderManager.VisualOffsets.fromItem(placeableAsItem);
         if (placeableAsItem != null) {
-            verticalFloorOffset = placeableAsItem.bind$getVisualVerticalOffsetPixels() / 16f;
-            horizontalFloorOffset = placeableAsItem.bind$getVisualHorizontalOffsetPixels() / 16f;
+            verticalFloorOffset = visualOffsets.getVisualVerticalOffsetPixels() / 16.0F;
+            horizontalFloorOffset = visualOffsets.getVisualHorizontalOffsetPixels() / 16.0F;
         }
 
         switch (state.get(PlacedToolBlock.FACE)) {
@@ -103,12 +105,14 @@ public class PlacedToolBERenderer implements BlockEntityRenderer<PlacedToolBE> {
                 }
             }
         }
+
     }
 
-    private void applyRotation(MatrixStack matrices, BlockState state, @Nullable PlaceableAsItem placeableAsItem) {
+    private void applyRotation(MatrixStack matrices, BlockState state, @Nullable ToolItem placeableAsItem) {
         float pitch = 0f;
+        ToolRenderManager.VisualOffsets visualOffsets = ToolRenderManager.VisualOffsets.fromItem(placeableAsItem);
         if (placeableAsItem != null) {
-            pitch = placeableAsItem.bind$getVisualPitchDegrees();
+            pitch = visualOffsets.getVisualPitchDegrees();
         }
 
         switch (state.get(PlacedToolBlock.FACING)) {

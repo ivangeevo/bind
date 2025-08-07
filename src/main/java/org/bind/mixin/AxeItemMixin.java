@@ -5,11 +5,12 @@ import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.item.ToolItem;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.bind.util.PlaceableToolManager;
-import org.bind.util.SharedInputState;
+import org.bind.util.ServerSharedInputState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -29,7 +30,7 @@ public abstract class AxeItemMixin {
     @Unique
     private boolean shouldPlaceTool(ItemUsageContext context) {
         PlayerEntity player = context.getPlayer();
-        if (player != null && SharedInputState.getToolPlacementInputHeld()) {
+        if (player != null && ServerSharedInputState.isHeld(player)) {
             ItemStack stack = context.getStack();
             if (!(stack.getItem() instanceof ToolItem)) {
                 return false;

@@ -14,8 +14,6 @@ import org.bind.tag.ModTags;
 
 import java.util.HashMap;
 
-import static org.bind.util.ToolRenderManager.Outlines.getToolCategory;
-
 public class ToolRenderManager {
 
     public enum BoundingBox {
@@ -168,67 +166,66 @@ public class ToolRenderManager {
             }
 
         }
+    }
 
-        public enum VisualOffsets {
-            PICKAXES(-15.0F, 4.75F, 0.0F),
-            AXES(0.0F, 5.0F, 0.0F),
-            SHOVELS(15.0F, 4.5F, -2.0F),
-            HOES(0.0F, 5.5F, -1.0F),
-            SWORDS(45.0F, 1.5F, 0.0F),
-            TE_CHISEL(0.0F, 0.0F, 0.0F);
+    public enum VisualOffsets {
+        PICKAXES(-15.0F, 4.75F, 0.0F),
+        AXES(0.0F, 5.0F, 0.0F),
+        SHOVELS(15.0F, 4.5F, -2.0F),
+        HOES(0.0F, 5.5F, -1.0F),
+        SWORDS(45.0F, 1.5F, 0.0F),
+        TE_CHISEL(0.0F, 0.0F, 0.0F);
 
-            private final float pitchDegrees;
-            private final float vOffsetPixels;
-            private final float hOffsetPixels;
+        private final float pitchDegrees;
+        private final float vOffsetPixels;
+        private final float hOffsetPixels;
 
-            VisualOffsets(float pitch, float vOffset, float hOffset) {
-                this.pitchDegrees = pitch;
-                this.vOffsetPixels = vOffset;
-                this.hOffsetPixels = hOffset;
-            }
-
-            public static VisualOffsets fromItem(Item item) {
-                return getToolCategory(item, PICKAXES, AXES, SHOVELS, HOES, SWORDS, TE_CHISEL);
-            }
-
-            public float getVisualPitchDegrees() {
-                return this.pitchDegrees;
-            }
-
-            public float getVisualVerticalOffsetPixels() {
-                return this.vOffsetPixels;
-            }
-
-            public float getVisualHorizontalOffsetPixels() {
-                return this.hOffsetPixels;
-            }
-
+        VisualOffsets(float pitch, float vOffset, float hOffset) {
+            this.pitchDegrees = pitch;
+            this.vOffsetPixels = vOffset;
+            this.hOffsetPixels = hOffset;
         }
 
-        static <T> T getToolCategory(Item item, T pickaxe, T axe, T shovel, T hoe, T sword, T chisel) {
-            if (!(item instanceof ToolItem)) {
-                return null;
+        public static VisualOffsets fromItem(Item item) {
+            return getToolCategory(item, PICKAXES, AXES, SHOVELS, HOES, SWORDS, TE_CHISEL);
+        }
+
+        public float getVisualPitchDegrees() {
+            return this.pitchDegrees;
+        }
+
+        public float getVisualVerticalOffsetPixels() {
+            return this.vOffsetPixels;
+        }
+
+        public float getVisualHorizontalOffsetPixels() {
+            return this.hOffsetPixels;
+        }
+
+    }
+
+    static <T> T getToolCategory(Item item, T pickaxe, T axe, T shovel, T hoe, T sword, T chisel) {
+        if (!(item instanceof ToolItem)) {
+            return null;
+        } else {
+            ItemStack tool = item.getDefaultStack();
+            if (tool.isIn(ModTags.Items.PICKAXES)) {
+                return pickaxe;
+            } else if (tool.isIn(ModTags.Items.AXES)) {
+                return axe;
+            } else if (tool.isIn(ItemTags.SHOVELS)) {
+                return shovel;
+            } else if (tool.isIn(ItemTags.HOES)) {
+                return hoe;
+            } else if (tool.isIn(ItemTags.SWORDS)) {
+                return sword;
             } else {
-                ItemStack tool = item.getDefaultStack();
-                if (tool.isIn(ModTags.Items.PICKAXES)) {
-                    return pickaxe;
-                } else if (tool.isIn(ModTags.Items.AXES)) {
-                    return axe;
-                } else if (tool.isIn(ItemTags.SHOVELS)) {
-                    return shovel;
-                } else if (tool.isIn(ItemTags.HOES)) {
-                    return hoe;
-                } else if (tool.isIn(ItemTags.SWORDS)) {
-                    return sword;
-                } else {
-                    return !tool.isIn(BTWRConventionalTags.Items.ADVANCED_CHISELS)
-                            && !tool.isIn(BTWRConventionalTags.Items.MODERN_CHISELS)
-                            ? null
-                            : chisel;
-                }
+                return !tool.isIn(BTWRConventionalTags.Items.ADVANCED_CHISELS)
+                        && !tool.isIn(BTWRConventionalTags.Items.MODERN_CHISELS)
+                        ? null
+                        : chisel;
             }
         }
     }
-
 
 }

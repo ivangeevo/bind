@@ -4,7 +4,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import org.bind.network.PlaceToolKeyHeldC2SPayload;
-import org.bind.util.SharedInputState;
+import org.bind.util.ClientSharedInputState;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -25,7 +25,7 @@ public class ModClientNetworking {
             if (isCtrlPressed != lastHeldState) {
                 ClientPlayNetworking.send(new PlaceToolKeyHeldC2SPayload(isCtrlPressed));
                 lastHeldState = isCtrlPressed;
-                SharedInputState.toolPlacementInputHeld = isCtrlPressed;
+                ClientSharedInputState.toolPlacementInputHeld = isCtrlPressed;
             }
         });
     }

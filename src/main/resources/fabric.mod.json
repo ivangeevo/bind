@@ -15,9 +15,9 @@
   "icon": "icon.png",
   "environment": "*",
   "entrypoints": {
-    "client": ["org.bind.BindModClient"],
-    "main": ["org.bind.BindMod"],
-    "fabric-datagen": ["org.bind.BindModDataGenerator"]
+    "client": ["org.btwr.bind.BindModClient"],
+    "main": ["org.btwr.bind.BindMod"],
+    "fabric-datagen": ["org.btwr.bind.BindModDataGenerator"]
   },
   "mixins": [
     "bind.mixins.json",

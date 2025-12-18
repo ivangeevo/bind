@@ -5,7 +5,6 @@
   "client": [
     "AxeItemClientMixin",
     "AxeItemAccessor"
-
   ],
   "injectors": {
     "defaultRequire": 1

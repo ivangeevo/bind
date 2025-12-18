@@ -10,7 +10,6 @@ import org.btwr.bind.block.entity.ModBlockEntities;
 public class BindMod implements ModInitializer {
 
     public static final String MOD_ID = "bind";
-
     public static final Logger LOGGER = LoggerFactory.getLogger("bind");
 
     @Override
@@ -18,6 +17,7 @@ public class BindMod implements ModInitializer {
         ModBlocks.registerModBlocks();
         ModBlockEntities.registerBlockEntities();
         ModNetworking.init();
+        //ModToolPlacementRules.init();
     }
 
 }

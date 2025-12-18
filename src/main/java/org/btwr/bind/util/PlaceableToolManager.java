@@ -3,11 +3,13 @@ package org.btwr.bind.util;
 import com.bwt.items.BwtItems;
 import com.bwt.tags.BwtBlockTags;
 import net.minecraft.advancement.criterion.Criteria;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
@@ -19,7 +21,33 @@ import org.btwr.bind.block.entity.PlacedToolBE;
 import org.btwr.bind.tag.ModTags;
 import org.btwr.shared_library.tag.BTWRConventionalTags;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PlaceableToolManager {
+
+    public record ToolPlacementRule(TagKey<Item> toolTag, TagKey<Block> validSurfaceTag) {}
+
+    /** Define rules for which surface a specific tool can be placed on **/
+    public static final class Rules {
+
+        private static final List<ToolPlacementRule> RULES = new ArrayList<>();
+
+        public static void register(TagKey<Item> toolTag, TagKey<Block> surfaceTag) {
+            RULES.add(new ToolPlacementRule(toolTag, surfaceTag));
+        }
+
+        public static boolean canPlace(ItemStack tool, BlockState surface) {
+            for (ToolPlacementRule rule : RULES) {
+                if (tool.isIn(rule.toolTag()) && surface.isIn(rule.validSurfaceTag())) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+
 
     /**
      * Determines the type of tool based on the item stack.
@@ -76,6 +104,12 @@ public class PlaceableToolManager {
         originalTool.decrementUnlessCreative(1, playerEntity);
         return true;
     }
+
+    /**
+    private static boolean isValidPlacement(ItemStack toolStack, BlockState stateAtPos) {
+        return Rules.canPlace(toolStack, stateAtPos);
+    }
+     **/
 
     private static boolean isValidPlacement(ItemStack toolStack, BlockState stateAtPos) {
         if (toolStack.isIn(ItemTags.PICKAXES)) {

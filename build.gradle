@@ -18,7 +18,9 @@ loom {
 }
 
 fabricApi {
-    configureDataGeneration()
+    configureDataGeneration({
+        modId = "bind"
+    })
 }
 
 base {
@@ -50,10 +52,14 @@ dependencies {
     modImplementation("maven.modrinth:btwr-shared-library:${project.btwr_sl_version}")
 
     // Tough Environment
-    modImplementation "maven.modrinth:tough-environment:${project.tough_environment_version}"
+    //modImplementation "maven.modrinth:tough-environment:${project.tough_environment_version}"
+    modLocalRuntime "maven.modrinth:tough-environment:${project.tough_environment_version}"
+    modCompileOnly "maven.modrinth:tough-environment:${project.tough_environment_version}"
 
     // Better With Time
-    modImplementation "maven.modrinth:better-with-time:${project.bwt_version}"
+    //modImplementation "maven.modrinth:better-with-time:${project.bwt_version}"
+    modLocalRuntime "maven.modrinth:better-with-time:${project.bwt_version}"
+    modCompileOnly "maven.modrinth:better-with-time:${project.bwt_version}"
 
 }
 

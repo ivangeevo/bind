@@ -1,7 +1,9 @@
 # List of changes
 
 # v1.5
++ Fixed a bug with Tough Environment chisel tools & Better With Time mattock/battleaxe tools causing a crash because of old BTWR: Shared Library version. This bug was present when using the previous version of Bind with the new BTWR: SL 0.6.5
 + Refactored pretty much the whole code; mainly for readability and cleaning up, but also so it's more in order with other mods from the BTWR project
++ Changed some code internally to prepare the mod for allowing placeable tools to be data driven. This is an extensive change and will come in a later update
 + Updated the mod to Fabric API 0.116.7, Fabric Loader 0.17.3 & BTWR: Shared Library 0.6.5
 
 # v1.4

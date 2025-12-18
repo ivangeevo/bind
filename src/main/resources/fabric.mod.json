@@ -21,7 +21,10 @@
   },
   "mixins": [
     "bind.mixins.json",
-    "bind.client.mixins.json"
+    {
+      "config": "bind.client.mixins.json",
+      "environment": "client"
+    }
   ],
   "depends": {
     "fabricloader": ">=${loader_version}",

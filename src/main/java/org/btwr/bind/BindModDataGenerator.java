@@ -5,7 +5,6 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import org.btwr.bind.datagen.BindBlockTagProvider;
 import org.btwr.bind.datagen.BindItemTagProvider;
 
-
 public class BindModDataGenerator implements DataGeneratorEntrypoint {
 
     @Override
@@ -14,6 +13,7 @@ public class BindModDataGenerator implements DataGeneratorEntrypoint {
 
         pack.addProvider(BindBlockTagProvider::new);
         pack.addProvider(BindItemTagProvider::new);
+        //pack.addProvider(BindToolPlacementProfiles::new);
     }
 
 }

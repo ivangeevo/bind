@@ -31,8 +31,6 @@ public class ModTags {
 
         public static final TagKey<Item> VANILLA_PLACEABLE_TOOLS = createTag("vanilla_placeable_tools");
 
-
-
         private static TagKey<Item> createTag (String name) {
             return TagKey.of(RegistryKeys.ITEM, Identifier.of(BindMod.MOD_ID, name));
         }

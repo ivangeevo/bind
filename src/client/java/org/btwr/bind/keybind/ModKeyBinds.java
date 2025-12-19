@@ -14,7 +14,8 @@ public class ModKeyBinds {
                 new KeyBinding(
                         "key.bind.tool_placement_key",
                         InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_LEFT_CONTROL,
-                        "key.category.bind.keybinds")
+                        "key.category.bind.keybinds"
+                )
         );
     }
 

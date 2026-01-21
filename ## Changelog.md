@@ -1,5 +1,8 @@
 # List of changes
 
+# v???(dev)
++ Fixed mod icon not displaying properly since it got broken in some of the last updates
+
 # v1.5
 + Fixed a bug with Tough Environment chisel tools & Better With Time mattock/battleaxe tools causing a crash because of old BTWR: Shared Library version. This bug was present when using the previous version of Bind with the new BTWR: SL 0.6.5
 + Refactored pretty much the whole code; mainly for readability and cleaning up, but also so it's more in order with other mods from the BTWR project

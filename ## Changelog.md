@@ -1,7 +1,7 @@
 # List of changes
 
-# v1.5.1(dev)
-+ Fixed a bug with items from Tough Environment and Better With Time crashing the game on placement because of using BTWR:SL 0.6.5 instead of 0.7 which changed packages internally, and they couldn't be located
+# v1.5.1
++ Fixed a bug (This time for real) with items from Tough Environment and Better With Time crashing the game on placement because of using BTWR:SL 0.6.5 instead of 0.7 which changed packages internally, and they couldn't be located
 + Fixed mod icon not displaying properly since it got broken in some of the last updates
 + Updated the mod to BTWR: Shared Library 0.7
 

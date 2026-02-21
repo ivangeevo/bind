@@ -1,5 +1,7 @@
 # List of changes
 
+# v???(dev)
+
 # v1.5.1
 + Added BTWR: SL as a dependency. It was in the mod before, but it's required as a dependency now, so compatibility with Better With Time can happen without errors. Before it didn't send any error messages which could've been confusing with people trying to use the mod with BWT
 + Fixed a bug (this time for real) with items from Tough Environment and Better With Time crashing the game on placement because of using BTWR:SL 0.6.5 instead of 0.7 which changed packages internally, and they couldn't be located

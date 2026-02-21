@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import org.btwr.bind.datagen.BindBlockTagProvider;
 import org.btwr.bind.datagen.BindItemTagProvider;
+import org.btwr.bind.datagen.BindToolPlacementProfiles;
 
 public class BindModDataGenerator implements DataGeneratorEntrypoint {
 
@@ -13,7 +14,7 @@ public class BindModDataGenerator implements DataGeneratorEntrypoint {
 
         pack.addProvider(BindBlockTagProvider::new);
         pack.addProvider(BindItemTagProvider::new);
-        //pack.addProvider(BindToolPlacementProfiles::new);
+        pack.addProvider(BindToolPlacementProfiles::new);
     }
 
 }

@@ -8,11 +8,14 @@ public record ToolPlacementProfile(BoundingBoxData boundingBox, VisualOffsetData
 
     public static final Codec<ToolPlacementProfile> CODEC =
             RecordCodecBuilder.create(instance -> instance.group(
-                    BoundingBoxData.CODEC.fieldOf("bounding_box")
+                    BoundingBoxData.CODEC
+                            .fieldOf("bounding_box")
                             .forGetter(ToolPlacementProfile::boundingBox),
-                    VisualOffsetData.CODEC.fieldOf("visual_offsets")
+                    VisualOffsetData.CODEC
+                            .fieldOf("visual_offsets")
                             .forGetter(ToolPlacementProfile::visualOffsets),
-                    OutlineOffsets.CODEC.fieldOf("outline_offsets")
+                    OutlineOffsets.CODEC
+                            .fieldOf("outline_offsets")
                             .forGetter(ToolPlacementProfile::outlineOffsets)
                     ).apply(instance, ToolPlacementProfile::new)
             );

@@ -19,7 +19,7 @@ import net.minecraft.world.event.GameEvent;
 import org.btwr.bind.block.ModBlocks;
 import org.btwr.bind.block.entity.PlacedToolBE;
 import org.btwr.bind.tag.ModTags;
-import org.btwr.shared_library.tag.BTWRConventionalTags;
+import org.btwr.shared_library.api.tag.BTWRConventionalTags;
 
 import java.util.ArrayList;
 import java.util.List;

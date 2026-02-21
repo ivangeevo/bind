@@ -7,9 +7,16 @@ public record VisualOffsetData(float pitchDegrees, float verticalOffsetPixels, f
 
     public static final Codec<VisualOffsetData> CODEC =
             RecordCodecBuilder.create(i -> i.group(
-                    Codec.FLOAT.fieldOf("pitch").forGetter(VisualOffsetData::pitchDegrees),
-                    Codec.FLOAT.fieldOf("v_offset").forGetter(VisualOffsetData::verticalOffsetPixels),
-                    Codec.FLOAT.fieldOf("h_offset").forGetter(VisualOffsetData::horizontalOffsetPixels)
-            ).apply(i, VisualOffsetData::new));
+                    Codec.FLOAT
+                            .fieldOf("pitch")
+                            .forGetter(VisualOffsetData::pitchDegrees),
+                    Codec.FLOAT
+                            .fieldOf("vertical_offset")
+                            .forGetter(VisualOffsetData::verticalOffsetPixels),
+                    Codec.FLOAT
+                            .fieldOf("horizontal_offset")
+                            .forGetter(VisualOffsetData::horizontalOffsetPixels)
+                    ).apply(i, VisualOffsetData::new)
+            );
 
 }

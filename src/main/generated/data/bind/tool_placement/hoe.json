@@ -1,0 +1,14 @@
+{
+  "bounding_box": {
+    "max_height": 14.0,
+    "max_width": 16.0,
+    "min_height": 2.0,
+    "min_width": 0.0
+  },
+  "outline_offsets": {},
+  "visual_offsets": {
+    "h_offset": 0.0,
+    "pitch": -15.0,
+    "v_offset": 4.75
+  }
+}

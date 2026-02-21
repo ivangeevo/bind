@@ -27,7 +27,7 @@ import net.minecraft.world.WorldView;
 import org.btwr.bind.block.entity.PlacedToolBE;
 import org.btwr.bind.tag.ModTags;
 import org.btwr.bind.util.ToolRenderManager;
-import org.btwr.shared_library.tag.BTWRConventionalTags;
+import org.btwr.shared_library.api.tag.BTWRConventionalTags;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;

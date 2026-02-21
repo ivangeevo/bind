@@ -1,0 +1,18 @@
+{
+  "bounding_box": {
+    "max_height": 5.0,
+    "max_width": 11.0,
+    "min_height": 5.0,
+    "min_width": 4.0
+  },
+  "outline_offsets": {
+    "ceiling_height_offset": 0.0,
+    "floor_height_offset": 0.0,
+    "wall_width_offset": 11.0
+  },
+  "visual_offsets": {
+    "h_offset": 0.0,
+    "pitch": 0.0,
+    "v_offset": 0.0
+  }
+}

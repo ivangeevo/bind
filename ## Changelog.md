@@ -1,7 +1,9 @@
 # List of changes
 
-# v???(dev)
+# v1.5.1(dev)
++ Fixed a bug with items from Tough Environment and Better With Time crashing the game on placement because of using BTWR:SL 0.6.5 instead of 0.7 which changed packages internally, and they couldn't be located
 + Fixed mod icon not displaying properly since it got broken in some of the last updates
++ Updated the mod to BTWR: Shared Library 0.7
 
 # v1.5
 + Fixed a bug with Tough Environment chisel tools & Better With Time mattock/battleaxe tools causing a crash because of old BTWR: Shared Library version. This bug was present when using the previous version of Bind with the new BTWR: SL 0.6.5

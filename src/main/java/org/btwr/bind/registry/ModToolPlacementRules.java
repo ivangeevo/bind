@@ -3,7 +3,7 @@ package org.btwr.bind.registry;
 import net.minecraft.registry.tag.ItemTags;
 import org.btwr.bind.tag.ModTags;
 import org.btwr.bind.util.PlaceableToolManager;
-import org.btwr.shared_library.tag.BTWRConventionalTags;
+import org.btwr.shared_library.api.tag.BTWRConventionalTags;
 
 public class ModToolPlacementRules {
 

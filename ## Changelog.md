@@ -1,6 +1,8 @@
 # List of changes
 
-# v???(dev)
+# v1.5.2
++ Changed BTWR: Shared Library to allow higher versions than the current one specified
++ Updated the mod to BTWR: Shared Library 0.8
 
 # v1.5.1
 + Added BTWR: SL as a dependency. It was in the mod before, but it's required as a dependency now, so compatibility with Better With Time can happen without errors. Before it didn't send any error messages which could've been confusing with people trying to use the mod with BWT
